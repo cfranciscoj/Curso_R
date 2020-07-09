@@ -1,8 +1,9 @@
 ### Control 1: Sintaxis básica y manipulación de objetos simples en R ###
-# Nombre  : Carlos Aravena De Los Ríos
-# Rut     : 13.668.222-9
-# Curso   : Introduccion a R 2020-2
-# Sigla   : DBDN-R-C1
+#
+# Nombre Integrantes : Macarena Muñoz Olave
+#                      Carlos Aravena De Los Ríos
+# Curso              : Introduccion a R 2020-2
+# Sigla              : DBDN-R-C1
 
 
 # Sección 1
