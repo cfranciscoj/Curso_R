@@ -74,7 +74,7 @@ while (i <= LargoNombres) {
   }
   i <- i + 1
 }
-print(paste("1c) Los nombres de los elementos de 'casos' son:", NombresElementos ))
+print(paste("1c) Los nombres de los elementos de 'casos' son:", NombresElementos))
 # R: Los nombres de los elementos de 'casos' son: mar, abr, may, jun, jul"
 # names(casos) # R: Los nombre son:
 #              #        1) "mar"
@@ -133,17 +133,33 @@ totales_mayo  <- casos$may$casos_totales
 totales_junio <- casos$jun$casos_totales
 totales_julio <- casos$jul$casos_totales
 
-totales_marzo
+
 
 ## 2c) (2pts) Para cada dataframe del paso anterior, genere una nueva columna
 ##            llamada mes, que repita el nombre del mes correspondiente por cada fila.
+mes <- rep("marzo", length.out = length(totales_marzo$dia_del_mes))
+totales_marzo <- cbind(totales_marzo, mes)
+
+mes <- rep("Abril", length.out = length(totales_abril$dia_del_mes))
+totales_abril <- cbind(totales_abril, mes)
+
+mes <- rep("Mayo", length.out = length(totales_mayo$dia_del_mes))
+totales_mayo <- cbind(totales_mayo, mes)
+
+mes <- rep("Junio", length.out = length(totales_junio$dia_del_mes))
+totales_junio <- cbind(totales_junio, mes)
+
+mes <- rep("Julio", length.out = length(totales_julio$dia_del_mes))
+totales_julio <- cbind(totales_julio, mes)
+
 
 ## 2d) (3pts) En cada data.frame, agregue una nueva columna llamada casos_diarios
 ##            que contanga la información correspontiende al total de casos
 ##            nuevos diarios(casos_nuevos_totales).
 
+casos_diarios <- casos$mar$casos_nuevos_totales$total
 
-
+str(casos$mar)
 # Pregunta 1.3
 #
 # 3a) (1pts) Con la ayuda de lafunción rbind() , una las filas de las 5 tablas
