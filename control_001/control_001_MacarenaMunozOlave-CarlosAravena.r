@@ -5,6 +5,8 @@
 # Curso              : Introduccion a R 2020-2
 # Sigla              : DBDN-R-C1
 
+####### Librerias a utilizar
+library("dplyr")
 
 # Sección 1
 #
@@ -85,19 +87,18 @@ print(paste("1c) Los nombres de los elementos de 'casos' son:", NombresElementos
 
 ## 1d) (2pt) ¿Qué clase de objeto está almacenado en sl slot correspondiente al
 ##            mes de junio ("jun") y cuántos elementos posee?
-# class(casos$jun) # R: El slot "jun" es de clase "Lista (list)"
 print(paste("1d) La Clase de 'casos$jun' es:", class(casos$jun)))
+# R: El slot "jun" es de clase "Lista (list)"
 
 ## 1e) (2pt) Para el mes de junio, ¿a qué clase de objeto corresponde
 ##           casos_totales y cuántos elementos posee?
 # class(casos$jun$casos_totales)  # R: La clase para el objeto casos_totales es "data.frame"
 # length(casos$jun$casos_totales) # R: La cantidad de elementos es 2
-
 print(paste("1d) La Clase de 'casos$jun$casos_totales' es:", class(casos$jun$casos_totales)))
+# R: La clase del objeto "casos_totales", para el mes de junio es "data.frame"
 print(paste("1d) La cantidad de elementos de 'casos$jun$casos_totales' es:", length(casos$jun$casos_totales)))
+# R: La cantidad de elmentos que posee el objeto "casos_totales" es "2"
 
-
-#str(casos$jun$casos_totales)
 
 # Pregunta 1.2
 #
@@ -118,9 +119,9 @@ print(paste("1d) La cantidad de elementos de 'casos$jun$casos_totales' es:", len
 ## Respusta
 ## 2a) (2pts) ¿Cuántos casos activos existían al 25 de marzo? (indique claramente
 ##             la expresión de R para obtener el valor solicitado) .
+print(paste("2a) Los casos activos que existian al 25 de marzo:", casos$mar$casos_activos$total[casos$mar$casos_activos$dia_del_mes == "25"]))
+# R: Los casos activos que existian al 25 de marzo es "1117"
 
-sum(casos$mar$casos_activos$total[1:25])
-head(casos$mar$casos_activos$total, 30)
 ## 2b) (1pts) Genere cinco nuevas variables llamadas totales_marzo,totales_abril,
 ##            totales_mayo, totales_junio y totales_julio, que contengan los
 ##            dataframes correspondientes al slot casos_totales del mes
