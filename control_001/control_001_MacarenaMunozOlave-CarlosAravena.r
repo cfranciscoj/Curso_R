@@ -127,6 +127,13 @@ print(paste("2a) Los casos activos que existian al 25 de marzo:", casos$mar$caso
 ##            dataframes correspondientes al slot casos_totales del mes
 ##            respectivo, (por ejemplo, la variable totales_julio debe contener
 ##            una dataframe de dimensión 8×2
+totales_marzo <- casos$mar$casos_totales
+totales_abril <- casos$abr$casos_totales
+totales_mayo  <- casos$may$casos_totales
+totales_junio <- casos$jun$casos_totales
+totales_julio <- casos$jul$casos_totales
+
+totales_marzo
 
 ## 2c) (2pts) Para cada dataframe del paso anterior, genere una nueva columna
 ##            llamada mes, que repita el nombre del mes correspondiente por cada fila.
