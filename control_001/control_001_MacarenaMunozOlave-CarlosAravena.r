@@ -69,13 +69,15 @@ i <- 1
 while (i <= LargoNombres) {
   if (i == 1){
     NombresElementos <- paste(NombresElementos, Nombres[i], sep= "")
+  } else if (i == LargoNombres){
+    NombresElementos <- paste(NombresElementos, Nombres[i], sep= " y ")
   } else {
     NombresElementos <- paste(NombresElementos, Nombres[i], sep= ", ")
   }
   i <- i + 1
 }
 print(paste("1c) Los nombres de los elementos de 'casos' son:", NombresElementos))
-# R: Los nombres de los elementos de 'casos' son: mar, abr, may, jun, jul"
+# R: Los nombres de los elementos de 'casos' son: mar, abr, may, jun y jul"
 # names(casos) # R: Los nombre son:
 #              #        1) "mar"
 #              #        2) "abr"
@@ -156,13 +158,123 @@ totales_julio <- cbind(totales_julio, mes)
 ## 2d) (3pts) En cada data.frame, agregue una nueva columna llamada casos_diarios
 ##            que contanga la información correspontiende al total de casos
 ##            nuevos diarios(casos_nuevos_totales).
+################################################################################
+#                                                                              #
+# Nota Importante:                                                             #
+#                                                                              #
+# Primero se valida que ambos data.frame tengan el mismo largo, en caso que    #
+# asi sea, en caso que los data.frame destino y origen, no tengan el mismo     #
+# orden, se recorre el de destino y luego origen, comprarando los días, en     #
+# caso que sean iguales, se rescata el "total" de esa posoción, como resultado #
+# se obtiene un vector de largo igual que dia_del_mes, orderano por día como   #
+# está en el destino                                                           #
+#                                                                              #
+################################################################################
 
-casos_diarios <- casos$mar$casos_nuevos_totales$total
+## Marzo
+casos_diarios = NULL
+if (length(totales_marzo$dia_del_mes) == length(casos$mar$casos_nuevos_totales$dia_del_mes)){
+  for (valor in totales_marzo$dia_del_mes){
+    i <- 1
+    repeat {
+      if (valor == casos$mar$casos_nuevos_totales$dia_del_mes[i]){
+        casos_diarios = c(casos_diarios, casos$mar$casos_nuevos_totales$total[i])
+        break
+      }
 
-str(casos$mar)
+      if (i == length(casos$mar$casos_nuevos_totales$dia_del_mes)){
+        break
+      }
+      i <- i +1
+    }
+  }
+}
+totales_marzo <- cbind(totales_marzo, casos_diarios)
+
+
+## Abril
+casos_diarios = NULL
+if (length(totales_abril$dia_del_mes) == length(casos$abr$casos_nuevos_totales$dia_del_mes)){
+  for (valor in totales_abril$dia_del_mes){
+    i <- 1
+    repeat {
+      if (valor == casos$abr$casos_nuevos_totales$dia_del_mes[i]){
+        casos_diarios = c(casos_diarios, casos$abr$casos_nuevos_totales$total[i])
+        break
+      }
+
+      if (i == length(casos$abr$casos_nuevos_totales$dia_del_mes)){
+        break
+      }
+      i <- i +1
+    }
+  }
+}
+totales_abril <- cbind(totales_abril, casos_diarios)
+
+## Mayo
+casos_diarios = NULL
+if (length(totales_mayo$dia_del_mes) == length(casos$may$casos_nuevos_totales$dia_del_mes)){
+  for (valor in totales_mayo$dia_del_mes){
+    i <- 1
+    repeat {
+      if (valor == casos$may$casos_nuevos_totales$dia_del_mes[i]){
+        casos_diarios = c(casos_diarios, casos$may$casos_nuevos_totales$total[i])
+        break
+      }
+
+      if (i == length(casos$may$casos_nuevos_totales$dia_del_mes)){
+        break
+      }
+      i <- i +1
+    }
+  }
+}
+totales_mayo <- cbind(totales_mayo, casos_diarios)
+
+## Junio
+casos_diarios = NULL
+if (length(totales_junio$dia_del_mes) == length(casos$jun$casos_nuevos_totales$dia_del_mes)){
+  for (valor in totales_junio$dia_del_mes){
+    i <- 1
+    repeat {
+      if (valor == casos$jun$casos_nuevos_totales$dia_del_mes[i]){
+        casos_diarios = c(casos_diarios, casos$jun$casos_nuevos_totales$total[i])
+        break
+      }
+
+      if (i == length(casos$jun$casos_nuevos_totales$dia_del_mes)){
+        break
+      }
+      i <- i +1
+    }
+  }
+}
+totales_junio <- cbind(totales_junio, casos_diarios)
+
+## Julio
+casos_diarios = NULL
+if (length(totales_julio$dia_del_mes) == length(casos$jul$casos_nuevos_totales$dia_del_mes)){
+  for (valor in totales_julio$dia_del_mes){
+    i <- 1
+    repeat {
+      if (valor == casos$jul$casos_nuevos_totales$dia_del_mes[i]){
+        casos_diarios = c(casos_diarios, casos$jul$casos_nuevos_totales$total[i])
+        break
+      }
+
+      if (i == length(casos$jul$casos_nuevos_totales$dia_del_mes)){
+        break
+      }
+      i <- i +1
+    }
+  }
+}
+totales_julio <- cbind(totales_julio, casos_diarios)
+
 # Pregunta 1.3
 #
-# 3a) (1pts) Con la ayuda de lafunción rbind() , una las filas de las 5 tablas
+# 3a) (1pts) Con la ayuda de la función rbind(), una las filas de las 5 tablas
 #            generadas en la pregunta anterior y guarde la tabla resultante en
 #            una variable llamada casos_hist.
 # 3b) (1pt)  En promedio, ¿Cuántos casos hay diariamente desde el 03 de marzo
