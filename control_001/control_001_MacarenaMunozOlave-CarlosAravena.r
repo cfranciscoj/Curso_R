@@ -139,7 +139,7 @@ totales_julio <- casos$jul$casos_totales
 
 ## 2c) (2pts) Para cada dataframe del paso anterior, genere una nueva columna
 ##            llamada mes, que repita el nombre del mes correspondiente por cada fila.
-mes <- rep("marzo", length.out = length(totales_marzo$dia_del_mes))
+mes <- rep("Marzo", length.out = length(totales_marzo$dia_del_mes))
 totales_marzo <- cbind(totales_marzo, mes)
 
 mes <- rep("Abril", length.out = length(totales_abril$dia_del_mes))
@@ -179,14 +179,32 @@ totales_julio$casos_diarios <- ifelse(totales_julio$dia_del_mes %in% casos$jul$c
 # 3c) (2pts) En promedio, ¿Cuántos casos hay diariamente en cada mes ?.
 # P1.3
 ## Respusta
-# 3a) (1pts) Con la ayuda de lafunción rbind() , una las filas de las 5 tablas
+# 3a) (1pts) Con la ayuda de la función rbind(), una las filas de las 5 tablas
 #            generadas en la pregunta anterior y guarde la tabla resultante en
 #            una variable llamada casos_hist.
+casos_hist = rbind(totales_marzo, totales_abril, totales_mayo, totales_junio, totales_julio)
 
 # 3b) (1pt)  En promedio, ¿Cuántos casos hay diariamente desde el 03 de marzo
 #            hasta el 08 de julio?
+var_aux <-  rbind(filter(casos_hist, (dia_del_mes >= 3 & mes == "Marzo")),
+                  filter(casos_hist, (dia_del_mes <= 8 & mes == "Julio")))
+print(paste("3b) El promedio diario entre el 3 de marzo y el 8 de julio es:", round(mean(var_aux$casos_diarios),2)))
+# R:"3b) El promedio diario entre el 3 de marzo y el 8 de julio es: 714.24"
 
 # 3c) (2pts) En promedio, ¿Cuántos casos hay diariamente en cada mes ?.
+PromedioDiarioPorMes = aggregate(x = casos_hist$casos_diarios,
+                                 by = list(casos_hist$mes),
+                                 FUN = mean)
+colnames(PromedioDiarioPorMes) <- c("Mes", "Promedio")
+print("El promedio diario por mes es:")
+PromedioDiarioPorMes
+# R: "El promedio diario por mes es:"
+# Mes    Promedio
+# Abril  442.83333
+# Julio  2961.25000
+# Junio  4942.76667
+# Marzo    91.26667
+# Mayo   2698.87097
 
 ################################################################################
 # Sección 2
@@ -201,9 +219,12 @@ totales_julio$casos_diarios <- ifelse(totales_julio$dia_del_mes %in% casos$jul$c
 #
 # En ambos vectores, los identificadores (id) de cada persona están contenidos
 # en el atributo names() del vector respectivo.
+RutaHombre <- paste(RutaBase, "/temp_h.rds", sep = "")
+RutaMujer <- paste(RutaBase, "/temp_m.rds", sep = "")
 
-# temp_h <- readRDS("temp_h.rds")
-# temp_m <- readRDS("temp_m.rds")
+temp_h <- readRDS(RutaHombre)
+temp_m <- readRDS(RutaMujer)
+
 
 
 # Pregunta 2.1
@@ -225,7 +246,22 @@ totales_julio$casos_diarios <- ifelse(totales_julio$dia_del_mes %in% casos$jul$c
 #                    m_189  mujer   36.8
 # P2.1. ---------------------------------------------------------------------
 ## Respuesta:
+IdeH <- names(temp_h)
+IdeM <- names(temp_m)
 
+df_H <- data.frame(
+  "id"         = IdeH,
+  "genero"      = rep("hombre", length.out = length(IdeH)),
+  "temperatura" = temp_h
+)
+
+df_M  <- data.frame(
+  "id"         = IdeM,
+  "genero"      = rep("mujer", length.out = length(IdeM)),
+  "temperatura" = temp_m
+)
+
+casos <- rbind(df_H, df_M)
 
 # Pregunta 2.2
 #
@@ -318,7 +354,7 @@ totales_julio$casos_diarios <- ifelse(totales_julio$dia_del_mes %in% casos$jul$c
 #            clase a data.frame. cree una variable llamada sintomas_df
 #            con la información de sintomas pero como data.frame.
 # 4b) (1pts) Se puede observar que los ids solo están disponibles en los
-#            nombres de las filas. Sin embargo esútil tener esta información
+#            nombres de las filas. Sin embargo es útil tener esta información
 #            como una columna más de la tabla. Para ello cree una nueva columna
 #            en la tabla sintomas_df llamada id que contenga los ids de cada
 #            registro.
