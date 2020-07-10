@@ -186,19 +186,22 @@ casos_hist = rbind(totales_marzo, totales_abril, totales_mayo, totales_junio, to
 
 # 3b) (1pt)  En promedio, ¿Cuántos casos hay diariamente desde el 03 de marzo
 #            hasta el 08 de julio?
+RutaCSV <- paste(RutaBase, "/casos_hist.csv", sep = "")
+write.csv(casos_hist, file=RutaCSV)
 var_aux <-  rbind(filter(casos_hist, (dia_del_mes >= 3 & mes == "Marzo")),
+                  filter(casos_hist, (mes != "Marzo" & mes != "Julio")),
                   filter(casos_hist, (dia_del_mes <= 8 & mes == "Julio")))
 print(paste("3b) El promedio diario entre el 3 de marzo y el 8 de julio es:", round(mean(var_aux$casos_diarios),2)))
-# R:"3b) El promedio diario entre el 3 de marzo y el 8 de julio es: 714.24"
+# R:"3b) El promedio diario entre el 3 de marzo y el 8 de julio es: 2122.34"
 
 # 3c) (2pts) En promedio, ¿Cuántos casos hay diariamente en cada mes ?.
 PromedioDiarioPorMes = aggregate(x = casos_hist$casos_diarios,
                                  by = list(casos_hist$mes),
                                  FUN = mean)
 colnames(PromedioDiarioPorMes) <- c("Mes", "Promedio")
-print("El promedio diario por mes es:")
+print("3c) El promedio diario por mes es:")
 PromedioDiarioPorMes
-# R: "El promedio diario por mes es:"
+# R: "3c) El promedio diario por mes es:"
 # Mes    Promedio
 # Abril  442.83333
 # Julio  2961.25000
@@ -250,13 +253,13 @@ IdeH <- names(temp_h)
 IdeM <- names(temp_m)
 
 df_H <- data.frame(
-  "id"         = IdeH,
+  "id"          = IdeH,
   "genero"      = rep("hombre", length.out = length(IdeH)),
   "temperatura" = temp_h
 )
 
 df_M  <- data.frame(
-  "id"         = IdeM,
+  "id"          = IdeM,
   "genero"      = rep("mujer", length.out = length(IdeM)),
   "temperatura" = temp_m
 )
@@ -280,21 +283,24 @@ casos <- rbind(df_H, df_M)
 # P2.2
 ## Respuestas:
 # 2a) (1pt) Cargue el archivo sintomas.rds en una variable llamada sintomas.
-
+RutaSintomas <- paste(RutaBase, "/sintomas.rds", sep = "")
+sintomas <- readRDS(RutaSintomas)
 
 # 2b) (1pt) ¿Cuál es la clase de este objeto?.
-
+print(paste("2b) La Clase de 'sintomas' es:", class(sintomas)))
+# R: "2b) La clase del objeto 'sintomas' es: matrix"
 
 # 2c) (1pt) Note que cada fila undica con un 1 si la persona presentó el
 #           respectivo síntoma y 0 si no. ¿Qué sintomas presentó la
 #           persona ubicada en el registro 450?.
-
+sintomas[450,]
 
 # 2d) (2pts) ¿Qué síntomas y qué temperatura presentó la persona con id "h_537"?
 #            Si es le es de utilidad puede utilizar la función rownames(),
 #            la cual permite obtener los nombres (id) de las filas de una matriz
-
-
+#rownames(sintomas)
+#colnames(sintomas)
+sintomas["h_537",]
 # # Nota de utilidad
 # # Ya sea trabajando con un vector, matriz, data.frame o lista, es posible omitir
 # # la selección de alguna(s) de sus posiciones (filas/columnas o slots).
