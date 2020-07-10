@@ -158,119 +158,16 @@ totales_julio <- cbind(totales_julio, mes)
 ## 2d) (3pts) En cada data.frame, agregue una nueva columna llamada casos_diarios
 ##            que contanga la información correspontiende al total de casos
 ##            nuevos diarios(casos_nuevos_totales).
-################################################################################
-#                                                                              #
-# Nota Importante:                                                             #
-#                                                                              #
-# Primero se valida que ambos data.frame tengan el mismo largo, en caso que    #
-# asi sea, en caso que los data.frame destino y origen, no tengan el mismo     #
-# orden, se recorre el de destino y luego origen, comprarando los días, en     #
-# caso que sean iguales, se rescata el "total" de esa posoción, como resultado #
-# se obtiene un vector de largo igual que dia_del_mes, orderano por día como   #
-# está en el destino                                                           #
-#                                                                              #
-################################################################################
-
 ## Marzo
-casos_diarios = NULL
-if (length(totales_marzo$dia_del_mes) == length(casos$mar$casos_nuevos_totales$dia_del_mes)){
-  for (valor in totales_marzo$dia_del_mes){
-    i <- 1
-    repeat {
-      if (valor == casos$mar$casos_nuevos_totales$dia_del_mes[i]){
-        casos_diarios = c(casos_diarios, casos$mar$casos_nuevos_totales$total[i])
-        break
-      }
-
-      if (i == length(casos$mar$casos_nuevos_totales$dia_del_mes)){
-        break
-      }
-      i <- i +1
-    }
-  }
-}
-totales_marzo <- cbind(totales_marzo, casos_diarios)
-
-
+totales_marzo$casos_diarios <- ifelse(totales_marzo$dia_del_mes %in% casos$mar$casos_nuevos_totales$dia_del_mes, casos$mar$casos_nuevos_totales$total, NA)
 ## Abril
-casos_diarios = NULL
-if (length(totales_abril$dia_del_mes) == length(casos$abr$casos_nuevos_totales$dia_del_mes)){
-  for (valor in totales_abril$dia_del_mes){
-    i <- 1
-    repeat {
-      if (valor == casos$abr$casos_nuevos_totales$dia_del_mes[i]){
-        casos_diarios = c(casos_diarios, casos$abr$casos_nuevos_totales$total[i])
-        break
-      }
-
-      if (i == length(casos$abr$casos_nuevos_totales$dia_del_mes)){
-        break
-      }
-      i <- i +1
-    }
-  }
-}
-totales_abril <- cbind(totales_abril, casos_diarios)
-
+totales_abril$casos_diarios <- ifelse(totales_abril$dia_del_mes %in% casos$abr$casos_nuevos_totales$dia_del_mes, casos$abr$casos_nuevos_totales$total, NA)
 ## Mayo
-casos_diarios = NULL
-if (length(totales_mayo$dia_del_mes) == length(casos$may$casos_nuevos_totales$dia_del_mes)){
-  for (valor in totales_mayo$dia_del_mes){
-    i <- 1
-    repeat {
-      if (valor == casos$may$casos_nuevos_totales$dia_del_mes[i]){
-        casos_diarios = c(casos_diarios, casos$may$casos_nuevos_totales$total[i])
-        break
-      }
-
-      if (i == length(casos$may$casos_nuevos_totales$dia_del_mes)){
-        break
-      }
-      i <- i +1
-    }
-  }
-}
-totales_mayo <- cbind(totales_mayo, casos_diarios)
-
+totales_mayo$casos_diarios <- ifelse(totales_mayo$dia_del_mes %in% casos$may$casos_nuevos_totales$dia_del_mes, casos$may$casos_nuevos_totales$total, NA)
 ## Junio
-casos_diarios = NULL
-if (length(totales_junio$dia_del_mes) == length(casos$jun$casos_nuevos_totales$dia_del_mes)){
-  for (valor in totales_junio$dia_del_mes){
-    i <- 1
-    repeat {
-      if (valor == casos$jun$casos_nuevos_totales$dia_del_mes[i]){
-        casos_diarios = c(casos_diarios, casos$jun$casos_nuevos_totales$total[i])
-        break
-      }
-
-      if (i == length(casos$jun$casos_nuevos_totales$dia_del_mes)){
-        break
-      }
-      i <- i +1
-    }
-  }
-}
-totales_junio <- cbind(totales_junio, casos_diarios)
-
+totales_junio$casos_diarios <- ifelse(totales_junio$dia_del_mes %in% casos$jun$casos_nuevos_totales$dia_del_mes, casos$jun$casos_nuevos_totales$total, NA)
 ## Julio
-casos_diarios = NULL
-if (length(totales_julio$dia_del_mes) == length(casos$jul$casos_nuevos_totales$dia_del_mes)){
-  for (valor in totales_julio$dia_del_mes){
-    i <- 1
-    repeat {
-      if (valor == casos$jul$casos_nuevos_totales$dia_del_mes[i]){
-        casos_diarios = c(casos_diarios, casos$jul$casos_nuevos_totales$total[i])
-        break
-      }
-
-      if (i == length(casos$jul$casos_nuevos_totales$dia_del_mes)){
-        break
-      }
-      i <- i +1
-    }
-  }
-}
-totales_julio <- cbind(totales_julio, casos_diarios)
+totales_julio$casos_diarios <- ifelse(totales_julio$dia_del_mes %in% casos$jul$casos_nuevos_totales$dia_del_mes, casos$jul$casos_nuevos_totales$total, NA)
 
 # Pregunta 1.3
 #
