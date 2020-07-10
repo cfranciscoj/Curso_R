@@ -89,14 +89,14 @@ print(paste("1c) Los nombres de los elementos de 'casos' son:", NombresElementos
 ##            mes de junio ("jun") y cuántos elementos posee?
 print(paste("1d) La Clase de 'casos$jun' es:", class(casos$jun)))
 # R: El slot "jun" es de clase "Lista (list)"
+print(paste("1d) La cantidad de elementos que posee 'casos$jun' es:", length(casos$jun)))
+# R: La cantidad de elementos que posee "casos$jun" es: 15"
 
 ## 1e) (2pt) Para el mes de junio, ¿a qué clase de objeto corresponde
 ##           casos_totales y cuántos elementos posee?
-# class(casos$jun$casos_totales)  # R: La clase para el objeto casos_totales es "data.frame"
-# length(casos$jun$casos_totales) # R: La cantidad de elementos es 2
-print(paste("1d) La Clase de 'casos$jun$casos_totales' es:", class(casos$jun$casos_totales)))
+print(paste("1e) La Clase de 'casos$jun$casos_totales' es:", class(casos$jun$casos_totales)))
 # R: La clase del objeto "casos_totales", para el mes de junio es "data.frame"
-print(paste("1d) La cantidad de elementos de 'casos$jun$casos_totales' es:", length(casos$jun$casos_totales)))
+print(paste("1e) La cantidad de elementos de 'casos$jun$casos_totales' es:", length(casos$jun$casos_totales)))
 # R: La cantidad de elmentos que posee el objeto "casos_totales" es "2"
 
 
