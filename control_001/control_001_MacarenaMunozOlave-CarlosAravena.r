@@ -293,14 +293,37 @@ print(paste("2b) La Clase de 'sintomas' es:", class(sintomas)))
 # 2c) (1pt) Note que cada fila undica con un 1 si la persona presentó el
 #           respectivo síntoma y 0 si no. ¿Qué sintomas presentó la
 #           persona ubicada en el registro 450?.
+
 sintomas[450,]
+# R: "2c) El resultado para la persona que está en el registro numero "450" fue:
+# temperatura    tiene_tos    tiene_dolor_cabeza    tiene_perdida_olfato    tiene_dolor_pecho
+# -----------    ---------    ------------------    --------------------    -----------------
+#    38.85178    1.00000      1.00000               1.00000                 1.00000
+# Lo que significa que:
+#     - La temperatura fue de 38.85°
+#     - Sí presentó tos
+#     - Sí presentó dolor de cabeza
+#     - Sí presentó perdida de olfato
+#     - Sí presentó dolor de pecho
 
 # 2d) (2pts) ¿Qué síntomas y qué temperatura presentó la persona con id "h_537"?
 #            Si es le es de utilidad puede utilizar la función rownames(),
 #            la cual permite obtener los nombres (id) de las filas de una matriz
 #rownames(sintomas)
 #colnames(sintomas)
+
 sintomas["h_537",]
+# R: "2c) El resultado para la fila de nombre "h_537" fue:
+# temperatura    tiene_tos    tiene_dolor_cabeza    tiene_perdida_olfato    tiene_dolor_pecho
+# -----------    ---------    ------------------    --------------------    -----------------
+#    36.6998     0.0000       0.0000                0.0000                  1.0000
+# Lo que significa que:
+#     - La temperatura fue de 36.7°
+#     - No presentó tos
+#     - No presentó dolor de cabeza
+#     - No presentó perdida de olfato
+#     - Sí presentó dolor de pecho
+
 # # Nota de utilidad
 # # Ya sea trabajando con un vector, matriz, data.frame o lista, es posible omitir
 # # la selección de alguna(s) de sus posiciones (filas/columnas o slots).
@@ -348,11 +371,26 @@ sintomas["h_537",]
 # P3
 ##Respuestas:
 # 3a) (3pt) ¿Cuántos registros presentaron exactamente los 4 síntomas?
+ColTemperatura <- which(colnames(sintomas) == "temperatura")
+RowSumaSintomas <- rowSums(sintomas[,-ColTemperatura])
+print(paste("3a) La cantidad de registros que presentaron exactamente los 4 sintomas es:", length(which(RowSumaSintomas==4))))
+# R: 3a) La cantidad de registros que presentaron exactamente los 4 sintomas es: 229
 
 # 3b) (1pt) ¿Cúantas personas presentaron tos?
+print(paste("3a) ", sum(sintomas[,"tiene_tos"]), ", personas presentaron tos", sep=""))
+# R: 3b) 608, personas presentaron tos
 
 # 3c) (2pt) ¿Cuál es el síntoma más frecuente?
+SintomasFrecuentes <- data.frame(
+  "NombreSintomas" = colnames(sintomas[,-ColTemperatura]),
+  "SumaSintomas"   = colSums(sintomas[,-ColTemperatura])
+)
 
+ValorMaximo <- max(SintomasFrecuentes$SumaSintomas)
+NombreSintoma <- SintomasFrecuentes[SintomasFrecuentes$SumaSintomas == ValorMaximo, "NombreSintomas"]
+Casos <- SintomasFrecuentes[SintomasFrecuentes$SumaSintomas == ValorMaximo, "SumaSintomas"]
+print(paste("3c) El sintomas más frecuente es:", NombreSintoma, "con", Casos, "casos"))
+# R: 3c) El sintomas más frecuente es: tiene_dolor_cabeza con 750 casos
 
 # Pregunta 2.4
 #
@@ -378,6 +416,7 @@ sintomas["h_537",]
 # 4a) (1pts) La función as.data.frame() permite coercionar un objeto de otra
 #            clase a data.frame. cree una variable llamada sintomas_df
 #            con la información de sintomas pero como data.frame.
+sintomas_df <- as.data.frame(sintomas, row.names = c("temperatura","tiene_tos","tiene_dolor_cabeza", "tiene_perdida_olfato", "tiene_dolor_pecho"), optional = FALSE)
 
 
 # 4b) (1pts) Se puede observar que los ids solo están disponibles en los
@@ -385,11 +424,19 @@ sintomas["h_537",]
 #            como una columna más de la tabla. Para ello cree una nueva columna
 #            en la tabla sintomas_df llamada id que contenga los ids de cada
 #            registro.
+IdeSintomas <- rownames(sintomas)
+sintomas_df <- cbind(sintomas_df, "id" = IdeSintomas)
+
 
 # 4c) (2pts) ¿Cuántas personas sólo presentaron tos y dolor de cabeza?
+TosDolorCabeza <- count(sintomas_df[sintomas_df$tiene_tos == 1 & sintomas_df$tiene_dolor_cabeza == 1, ])
+print(paste("4c) La cantidad de Personas que presentaron tos y dolor de caneza es:", TosDolorCabeza))
+# R: 4c) La cantidad de Personas que presentaron tos y dolor de caneza es: 494"
 
 
 # 4d) (1pt) Se sabe que una persona tiene fiebre cuando su temperatura es
 #           mayor o igual a los 37.2°. Cree una nueva columna en la tabla
 #           sintomas_df llamada tiene_fiebre que contenga TRUE cuando tiene
 #           fiebre y FALSE en caso contrario.
+Fiebre <- sintomas_df$temperatura >= 37.2
+sintomas_df <- cbind(sintomas_df, "tiene_fiebre" = Fiebre)
