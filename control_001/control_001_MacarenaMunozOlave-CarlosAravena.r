@@ -186,8 +186,6 @@ casos_hist = rbind(totales_marzo, totales_abril, totales_mayo, totales_junio, to
 
 # 3b) (1pt)  En promedio, ¿Cuántos casos hay diariamente desde el 03 de marzo
 #            hasta el 08 de julio?
-RutaCSV <- paste(RutaBase, "/casos_hist.csv", sep = "")
-write.csv(casos_hist, file=RutaCSV)
 var_aux <-  rbind(filter(casos_hist, (dia_del_mes >= 3 & mes == "Marzo")),
                   filter(casos_hist, (mes != "Marzo" & mes != "Julio")),
                   filter(casos_hist, (dia_del_mes <= 8 & mes == "Julio")))
@@ -429,9 +427,9 @@ sintomas_df <- cbind(sintomas_df, "id" = IdeSintomas)
 
 
 # 4c) (2pts) ¿Cuántas personas sólo presentaron tos y dolor de cabeza?
-TosDolorCabeza <- count(sintomas_df[sintomas_df$tiene_tos == 1 & sintomas_df$tiene_dolor_cabeza == 1, ])
-print(paste("4c) La cantidad de Personas que presentaron tos y dolor de caneza es:", TosDolorCabeza))
-# R: 4c) La cantidad de Personas que presentaron tos y dolor de caneza es: 494"
+TosDolorCabeza <- count(sintomas_df[sintomas_df$tiene_tos == 1 & sintomas_df$tiene_dolor_cabeza == 1 & sintomas.df$tiene_perdida_olfato == 0 & sintomas.df$tiene_dolor_pecho == 0, ] ), ])
+print(paste("4c) La cantidad de Personas que presentaron tos y dolor de cabeza es:", TosDolorCabeza))
+# R: 4c) La cantidad de Personas que presentaron tos y dolor de cabeza es: 494"
 
 
 # 4d) (1pt) Se sabe que una persona tiene fiebre cuando su temperatura es
