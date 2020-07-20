@@ -19,7 +19,7 @@ Para mayor información sobre las distintas opciones gráficas de ggplot puede c
 https://ggplot2.tidyverse.org/index.html
 
 
-![./img/01_casos_acum.png](attachment:01_casos_acum.png)
+![img/01_casos_acum.png](attachment:01_casos_acum.png)
 
 ![img/02_casos_diarios.png](attachment:02_casos_diarios.png)
 
