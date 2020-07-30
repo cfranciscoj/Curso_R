@@ -427,7 +427,7 @@ sintomas_df <- cbind(sintomas_df, "id" = IdeSintomas)
 
 
 # 4c) (2pts) ¿Cuántas personas sólo presentaron tos y dolor de cabeza?
-TosDolorCabeza <- count(sintomas_df[sintomas_df$tiene_tos == 1 & sintomas_df$tiene_dolor_cabeza == 1 & sintomas.df$tiene_perdida_olfato == 0 & sintomas.df$tiene_dolor_pecho == 0, ] ), ])
+TosDolorCabeza <- count(sintomas_df[sintomas_df$tiene_tos == 1 & sintomas_df$tiene_dolor_cabeza == 1 & sintomas_df$tiene_perdida_olfato == 0 & sintomas_df$tiene_dolor_pecho, ] )
 print(paste("4c) La cantidad de Personas que presentaron tos y dolor de cabeza es:", TosDolorCabeza))
 # R: 4c) La cantidad de Personas que presentaron tos y dolor de cabeza es: 494"
 
