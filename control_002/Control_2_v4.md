@@ -1,7 +1,7 @@
 # Control 2: Manipulación de tablas y gráficos
 
 
-Nombre 1: _Puede incluir su nombre acá haciendo doble click_                                                                                                                                      <br> 
+Nombre 1: _Puede incluir su nombre acá haciendo doble click_                                                                                                                                      <br>
 Nombre 2: _Puede incluir su nombre acá haciendo doble click_   
 
 # Instrucciones
@@ -15,23 +15,23 @@ Las preguntas formuladas en este test pueden ser abordadas con las herramientas 
 Dispondrán hasta el día **domingo 02 de agosto** hasta las 23:59 hrs para hacer envío de sus respuestas.
 Una vez finalizado el desarrollo del test, deberá entregarlo teniendo en cuenta las siguientes consideraciones :
 
- 1. Descargue el notebook en **formato HTML** (uno por pareja), e indique en el nombre del archivo los nombres de los integrantes, Control1_nombres_integrantes.html. 
+ 1. Descargue el notebook en **formato HTML** (uno por pareja), e indique en el nombre del archivo los nombres de los integrantes, Control1_nombres_integrantes.html.
     En caso de trabajar en Rstudio, deberá enviar el script de extensión *.R con el siguiente nombre: Control2_nombres_integrantes.R , **procurando indicar con comentarios claros, qué pregunta está respondiendo en cada caso**.
  * Envíe el archivo al correo angelubilla@gmail.com, con copia a majorquev@gmail.com con el asunto "DBDN-R-C2: 'nombre y apellido de los integrantes' "
- 
-**NOTA**: 
+
+**NOTA**:
    * Los correos cuyo asunto no comiencen con "DBDN-R-C2" no llegarán a destino y por ende no serán calificados.
    * Los archivos que no contengan nombre serán calificados con la nota mínima 1.0.
    * Los correos enviados posterior a la fecha y hora de entrega indicados tendrán una penalización de 1 punto por día (o fracción) de retraso en la entrega, por ejemplo, si usted envía sus respuestas a las 00:05 hrs del lunes 03 de agosto, su nota máxima será un 6.0.
-   
-   
+
+
 
 # Sección 1
 
 En la ruta `./datasets` se encuentran los siguientes arhivos, correspondiente a un sondeo de distintos restaurants de EE.UU y sus valoraciones.
 El archivo `generalinfo.csv` contiene información propia del restaurant, como tipo de comida ofrecida y valoración de los clientes entre otros.
 
-* `id_restaurant`: Identificador del restaurant valorado. 
+* `id_restaurant`: Identificador del restaurant valorado.
 * `label`: Nombre del restaurant.
 * `food_type`: Tipo de comida ofrecida por el restaurant.
 * `review`: Calificación promedio del restaurant otorgada por los usuarios. (valor entre 0 y 1)
@@ -45,7 +45,7 @@ Por otra parte, la información contenida en el archivo `location.csv` es la sig
 
 Note que ambas tablas están relacionadas a través de los campos `id_restaurant` y `id_rest`.
 
-## Preliminar 
+## Preliminar
 Cargue los archivos indicados previamente en dos variables, una llamada `general` y otra `location` para  `generalinfo.csv` y `location.csv` respectivamente.
 
 
@@ -69,7 +69,7 @@ options(repr.plot.width=12, repr.plot.height=12)
 
 ```R
 # P1.1
-## Respusta 
+## Respusta
 
 ```
 
@@ -85,7 +85,7 @@ options(repr.plot.width=12, repr.plot.height=12)
 
 ```R
 # P1.2
-## Respusta 
+## Respusta
 
 ```
 
@@ -99,22 +99,22 @@ options(repr.plot.width=12, repr.plot.height=12)
  * Los restaurants deben ir ordenados según su cantidad de sucursales.
  * Incluya tiquetas en la parte superior de cada barra, que muestre la cantidad de sucursales respectivas.
  * Las leyendas de cada gráfico no deben visualizarse
- 
+
 Como ayuda, puede ser de utilidad investigar la usabilidad de las siguientes funciones de ggplot2.
   * `labs()`
   * `geom_label()`; `geom_text()`
   * `reorder()`
   * `coord_flip()`
   * `theme()` en conjunto con `element_text()`
- 
+
  A modo de ejemplo puede tener como referencia los siguientes gráficos.
- 
- 
- 
- ![plot_zoom_png.PNG](attachment:plot_zoom_png.PNG)
- ![plot_zoom_png2.PNG](attachment:plot_zoom_png2.PNG)
- 
- 
+
+
+
+ ![plot_zoom_png.PNG](img/plot_zoom_001.png)
+ ![plot_zoom_png2.PNG](img/plot_zoom_002.png)
+
+
 
 
 
@@ -124,7 +124,7 @@ Como ayuda, puede ser de utilidad investigar la usabilidad de las siguientes fun
 
 ```R
 # P1.3
-## Respusta 
+## Respusta
 
 
 ```
@@ -142,21 +142,21 @@ Como ayuda, puede ser de utilidad investigar la usabilidad de las siguientes fun
 
 Su tabla deberá tener la siguiente estructura:
 
-![image.png](attachment:image.png)
+![image.png](img/plot_zoom_003.png)
 
 **P4b) (2pts)** Basado en la tabla anterior, construya dos nuevas columnas llamadas `density_food_type` y `ratio_review` que contengan la siguiente información:
- 
+
  * `density_food_type`: Representa el cuociente entre le total de restaurants por tipo de comida y ciudad, respecto del total de restaurantes de la ciudad. (`n_rest/total_rest`)
  * `ratio_review`: Representa el cociente entre a valoración del restaurant por tipo de comida y ciudad, respecto de la valoración promedio de los resturants de la misma ciudad. (`review_prom/review_prom_city`)
- 
+
 **P4c) (3pts)** Mediante un gráfico de dispersión, muestre la relación entre `density_food_type` y `ratio_review`. Investigue sobre el parámetro `alpha` dentro de la capa geométrica para una mejor visualizaciónd de los puntos. Adicionalmente añada una curva de tendencia y, con base en él, indique si cabe la posibilidad de establecer algún tipo de dependencia entre `density_food_type` y `ratio_review`.
- 
+
 
 
 
 ```R
 # P1.4
-## Respusta 
+## Respusta
 
 ```
 
@@ -172,7 +172,7 @@ options(repr.plot.width=9, repr.plot.height = 9)
 #########
 
 # P1.5
-## Respusta 
+## Respusta
 ```
 
 ## Pregunta 1.6
@@ -180,8 +180,8 @@ options(repr.plot.width=9, repr.plot.height = 9)
 **P6a) (2pts)** Determine cuáles son las iguientes ciudades:
  * Ciudad 1: Ciudad con mayor cantidad de restaurants (posición 1).
  * Ciudad 2: Ciudad ubicada en la posición 5, al ordenar las ciudades de manera decreciente según cantidad de restaurants.
- * Ciudad 3: Ciudad ubicada en la posición 10, al ordenar las ciudades de manera decreciente según cantidad de restaurants. <br> 
- 
+ * Ciudad 3: Ciudad ubicada en la posición 10, al ordenar las ciudades de manera decreciente según cantidad de restaurants. <br>
+
 **P6b) (6pts)** Usted deberá graficar la cantidad de restaurants, por cada uno de los **5 tipos de comida más frecuentes** dentro de la ciudad respectiva. Las ciudades graficadas deben corresponder, de izquierda a derecha, a las ciudades de posición 1,5 y 10 encontradas en **P6a)**. Al generar el gráfico, deberá tener en cuenta los siguientes elementos. <br>
 
   * Investigue sobre el parámetro `position` dentro de la capa geométrica que genera el gráfico de barras, para la correcta presentación de las mismas.
@@ -195,13 +195,13 @@ options(repr.plot.width=9, repr.plot.height = 9)
 
 
 
-![image.png](attachment:image.png)
+![image.png](img/plot_zoom_004.png)
 
 
 
 
 ```R
 # P1.6
-## Respusta 
+## Respusta
 
 ```
