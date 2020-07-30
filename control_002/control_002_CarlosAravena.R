@@ -6,6 +6,9 @@
 
 ####### Librerias a utilizar
 library("dplyr")
+library("ggplot2")
+
+
 
 
 ############################## Sección 1 ##############################
