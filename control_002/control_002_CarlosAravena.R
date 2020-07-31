@@ -9,11 +9,44 @@ library("dplyr")
 library("ggplot2")
 
 
+### Sección 1
+# En la ruta ./datasets se encuentran los siguientes arhivos, correspondiente
+# a un sondeo de distintos restaurants de EE.UU y sus valoraciones.
+# El archivo generalinfo.csv contiene información propia del restaurant,
+# como tipo de comida ofrecida y valoración de los clientes entre otros.
+#     - id_restaurant: Identificador del restaurant valorado.
+#     - label: Nombre del restaurant.
+#     - food_type: Tipo de comida ofrecida por el restaurant.
+#     - review: Calificación promedio del restaurant otorgada por los usuarios.
+#       (valor entre 0 y 1)
+#
+# Por otra parte, la información contenida en el archivo location.csv
+# es la siguiente:
+#     - id_rest: Identificador del restaurant valorado.
+#     - street_num: Numeración de la ubicación del restaurant.
+#     - street_name: Nombre de la calle donde está ubicado el restaurant.
+#     - city: Ciudad donde se ubica el restaurant.
+#
+# Note que ambas tablas están relacionadas a través de los campos
+# id_restaurant y id_rest.
+#
+#
+### Preliminar
+# Cargue los archivos indicados previamente en dos variables, una llamada
+# general y otra location para generalinfo.csv y location.csv respectivamente.
+RutaBase = getwd()
+RutaGeneral <- paste(RutaBase, "/datesets/generalinfo.csv", sep = "")
+general <- read.csv(RutaGeneral)
+RutaLocation <- paste(RutaBase, "/datesets/location.csv", sep = "")
+location <- read.csv(RutaLocation)
+
 
 
 ############################## Sección 1 ##############################
 ### Preguntas 1.1
 # P1a) (1pt) Basándose en a tabla general, ¿cuántos restaurants distintos hay en total?
+general
+
 # P1b) (1pt) ¿En cuántos tipos de comida diferentes se clasifican los restaurants?
 # P1c) (2pt) ¿Cuántas ciudades distintas considera el sondeo?
 # P1d) (2pt) ¿Indique el tipo de comida y las ciudades donde se encuentra el restaurant
