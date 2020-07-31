@@ -35,9 +35,9 @@ library("ggplot2")
 # Cargue los archivos indicados previamente en dos variables, una llamada
 # general y otra location para generalinfo.csv y location.csv respectivamente.
 RutaBase = getwd()
-RutaGeneral <- paste(RutaBase, "/datesets/generalinfo.csv", sep = "")
+RutaGeneral <- paste(RutaBase, "/datasets/generalinfo.csv", sep = "")
 general <- read.csv(RutaGeneral)
-RutaLocation <- paste(RutaBase, "/datesets/location.csv", sep = "")
+RutaLocation <- paste(RutaBase, "/datasets/location.csv", sep = "")
 location <- read.csv(RutaLocation)
 
 
@@ -45,15 +45,30 @@ location <- read.csv(RutaLocation)
 ############################## Sección 1 ##############################
 ### Preguntas 1.1
 # P1a) (1pt) Basándose en a tabla general, ¿cuántos restaurants distintos hay en total?
-general
+# summary(general)
+Restoranes <- count(general,label)
+print(paste("1a) La cantidad de restaurants distintos es: ", length(Restoranes$label)))
+#R: "1a) La cantidad de restaurants distintos es:  7606"
 
 # P1b) (1pt) ¿En cuántos tipos de comida diferentes se clasifican los restaurants?
+TipoComida <- count(general, food_type)
+print(paste("1b) Los tipos de comida diferentes se clasifican los restaurants son: ", length(TipoComida$food_type)))
+# R: "1b) Los tipos de comida diferentes se clasifican los restaurants son:  145"
+
+
 # P1c) (2pt) ¿Cuántas ciudades distintas considera el sondeo?
+Ciudades <- count(location, city)
+print(paste("1c) La cantidad de ciudades distintas considera el sondeo es: ", length(Ciudades$city)))
+# R: "1c) La cantidad de ciudades distintas considera el sondeo es:  167"
+
+
 # P1d) (2pt) ¿Indique el tipo de comida y las ciudades donde se encuentra el restaurant
 #             "great wall restaurant"?
+
+
 # P1e) (2pt) ¿Cuántos restaurantes de la ciudad de san francisco tienen calificación
 #             mayor o igual a 3.8 y venden comida vegetariana (vegetarian) ?
-
+#
 
 ### Preguntas 1.2
 # P2a) (2pt) Sin considerar San Francisco, ¿cuál es la ciudad con mayor cantidad
