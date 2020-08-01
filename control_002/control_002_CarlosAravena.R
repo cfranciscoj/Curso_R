@@ -100,22 +100,26 @@ print(paste("1e) La cantidad de restaurantes en la ciudad de san francisco que t
 CiudadMayorSondeo <- location %>%
                        filter(city != "san francisco") %>%
                        group_by(city) %>%
-                       summarise(cantidad = n(), .groups = 'drop') %>%
+                       summarise(cantidad = n(), 
+                                 .groups = 'drop') %>%
                        filter(cantidad == max(cantidad))
 
-print(paste("2a) la ciudad con mayor cantidad de restaurantes sondeados, sin considerar San Francisco es:", CiudadMayorSondeo$city))
+print(paste("2a) la ciudad con mayor cantidad de restaurantes sondeados, sin considerar San Francisco es:", CiudadMayorSondeo %>% select(city)))
 #R: "2a) la ciudad con mayor cantidad de restaurantes sondeados, sin considerar San Francisco es: san jose"
 
 
 
-# P2b) (1pt) ¿Cuáles son los 3 tipos de comida ofrecido más comunes ?
+# P2b) (1pt) ¿Cuáles son los 3 tipos de comida ofrecido más comunes?
 Comunes <- general %>%
              group_by(food_type) %>%
-             summarise(cantidad = n(), .groups = 'drop') %>%
-             arrange(desc(cantidad))
+             summarise(cantidad = n(), 
+                       .groups = 'drop') %>%
+             arrange(desc(cantidad)) %>%
+             head(3)
 
 print("2b) Los 3 tipos de comida ofrecido más comunes son: ")
-head(Comunes, 3)
+Comunes %>%
+  select(food_type)
 # R: 2b) Los 3 tipos de comida ofrecido más comunes son:
 #   food_type cantidad
 # 1 cafe      1098
@@ -129,11 +133,14 @@ TipoJaponesa <- general %>%
                   inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
                   filter(city != "san francisco" & food_type == "japanese") %>%
                   group_by(city) %>%
-                  summarise(cantidad = n(), .groups = 'drop') %>%
-                  arrange(desc(cantidad))
+                  summarise(cantidad = n(), 
+                            .groups = 'drop') %>%
+                  arrange(desc(cantidad)) %>%
+                  head(3)
 
 print("2c) Las 3 ciudades con mayor cantidad de restaurants que ofrecen comido tipo japanese son: ")
-head(TipoJaponesa, 3)
+TipoJaponesa %>%
+  select(city)
 # R: 2c) Las 3 ciudades con mayor cantidad de restaurants que ofrecen comido tipo japanese son:
 #   city       cantidad
 # 1 san jose   28
@@ -148,10 +155,11 @@ Promedio <- general %>%
               inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
               group_by(city) %>%
               summarize(promedio = mean(review), .groups = 'drop') %>%
-              arrange(desc(promedio))
+              arrange(desc(promedio)) %>%
+              head(1)
 
-head(Promedio,1)
-print(paste("2d) la ciudad que escojo es:", head(Promedio$city,1)))
+
+print(paste("2d) la ciudad que escojo es:", Promedio$city))
 # R: "2d) la ciudad que escojo es: cerritos"
 
 # P2e) (2pt) Cuál es la ciudad con mejor valoración promedio de restaurantes
@@ -160,7 +168,8 @@ PromedioBarbeque <- general %>%
                       inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
                       filter(food_type == "barbeque") %>%
                       group_by(city) %>%
-                      summarize(promedio = mean(review), .groups = 'drop') %>%
+                      summarize(promedio = mean(review), 
+                                .groups = 'drop') %>%
                       arrange(desc(promedio))
 
 print(paste("2e) la ciudad con mejor valoración promedio de restaurantes tipo barbeque es:", head(PromedioBarbeque$city,1)))
@@ -175,7 +184,8 @@ CantRestEnMasCiudad <- general %>%
                          inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
                          distinct(label, city) %>%
                          group_by(label) %>%
-                         summarise(cantidad = n(), .groups = 'drop') %>%
+                         summarise(cantidad = n(), 
+                                   .groups = 'drop') %>%
                          filter(cantidad > 1) %>%
                          count()
 
@@ -185,12 +195,14 @@ print(paste("3a) La cantidad de restaurants tienen que están en más de una ciu
 
 # P3b) (2pt) ¿Cuál es el restaurant que tiene presencia en la mayor cantidad de
 #             ciudades distintas?¿En cuántas ciudades está presente?
-RestMasCiudades <- head(general %>%
-                          inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
-                          distinct(label, city) %>%
-                          group_by(label) %>%
-                          summarise(cantidad = n(), .groups = 'drop') %>%
-                          arrange(desc(cantidad)), 1)
+RestMasCiudades <- general %>%
+                     inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+                     distinct(label, city) %>%
+                     group_by(label) %>%
+                     summarise(cantidad = n(), 
+                               .groups = 'drop') %>%
+                     arrange(desc(cantidad)) %>%
+                     head(1)
 
 print(paste("3b) El restaurant que tiene presencia en la mayor cantidad de ciudades distintas es: ", RestMasCiudades$label))
 print(paste("3b) y está presente en", RestMasCiudades$cantidad ,"ciudades"))
@@ -211,25 +223,37 @@ print(paste("3b) y está presente en", RestMasCiudades$cantidad ,"ciudades"))
 #               - Incluya tiquetas en la parte superior de cada barra,
 #                 que muestre la cantidad de sucursales respectivas.
 #               - Las leyendas de cada gráfico no deben visualizarse
-RestMasSuc <- head(general %>%
+RestMasSuc <- general %>%
                      inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
                      group_by(label) %>%
-                     summarise(cantidad = n(), .groups = 'drop') %>%
-                     arrange(desc(cantidad)),15)
+                     summarise(cantidad = n(), 
+                               .groups = 'drop') %>%
+                     arrange(desc(cantidad)) %>%
+                     head(15)
 
 # Reordenamiento de los datos de mayor a menor, según cantidad de sucursales
-RestMasSuc$label <- reorder(RestMasSuc$label, -RestMasSuc$cantidad) 
+RestMasSuc$label <- reorder(RestMasSuc$label, RestMasSuc$cantidad) 
 
 # Se despliega el gráfico
 RestMasSuc %>%
-  ggplot(aes(label, cantidad )) + 
-  geom_col(alpha = 0.8) +
-  xlab("Restaurants") + 
-  ylab("Cantidad de Sucursales") +
-  ggtitle("Total de Sucursales por Restaurants") + 
-  geom_text(aes(label = cantidad), vjust = -0.5) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust= 1))
+  ggplot(aes(x = label, y = cantidad)) + 
+  geom_bar(stat='identity', 
+           position='dodge', 
+           alpha = 0.8,
+           aes(fill = cantidad)) +
+  scale_fill_gradient(low = "#2c5982", high = "#329DA8", na.value = NA) +
+  labs(title = "Top 15 restaurants con mayor cantidad de sucursales",
+       x ="Restaurants",
+       y = "Cantidad de Sucursales") +
+  geom_label(aes(x = label, y = cantidad, label = cantidad), 
+             label.size =0.025,
+             position = "stack",
+             vjust = 0) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust= 1)) +
+  guides(fill = FALSE) +
+  coord_flip()
   
+
 ### Preguntas 1.4
 # P4a) (4pts) Genere una tabla llamada resumen, que contenga la siguiente
 #             información:
@@ -354,7 +378,8 @@ resumen %>%
 #               de manera decreciente según cantidad de restaurants.
 Ciudades_1_5_10 <- resumen %>%
                      group_by(city) %>%
-                     summarise(cantidad = n(), .groups = 'drop') %>%
+                     summarise(cantidad = n(), 
+                               .groups = 'drop') %>%
                      arrange(desc(cantidad)) %>%
                      slice(c(1, 5, 10)) %>%
                      select(city)
@@ -371,12 +396,9 @@ while (i <= LargoCiudades) {
   print(paste("6a) La ciudad en la Posición",PosicionCiudad,"es", Ciudades_1_5_10[i,1]))
   i <- i + 1
 }
-
 # R: "6a) La ciudad en la Posición 1 es san francisco"
 #    "6a) La ciudad en la Posición 5 es palo alto"
 #    "6a) La ciudad en la Posición 10 es santa clara"
-
-
 
 # P6b) (6pts) Usted deberá graficar la cantidad de restaurants, por cada uno
 #             de los 5 tipos de comida más frecuentes dentro de la ciudad
@@ -406,3 +428,5 @@ while (i <= LargoCiudades) {
 #       Por otro lado, no es necesaria la utilización de la misma paleta de
 #       colores. En este gráfico se muestran las ciudades de posición 1, 2 y 3.
 #       Ustede deberá visualizar las 1, 5 y 10.
+
+
