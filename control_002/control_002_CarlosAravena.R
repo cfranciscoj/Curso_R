@@ -10,6 +10,7 @@ library("ggplot2")
 library("magrittr")
 
 
+
 ### Sección 1
 # En la ruta ./datasets se encuentran los siguientes arhivos, correspondiente
 # a un sondeo de distintos restaurants de EE.UU y sus valoraciones.
@@ -191,10 +192,10 @@ RestMasCiudades <- head(general %>%
                           summarise(cantidad = n(), .groups = 'drop') %>%
                           arrange(desc(cantidad)), 1)
 
-print(paste("3a) El restaurant que tiene presencia en la mayor cantidad de ciudades distintas es: ", RestMasCiudades$label))
-print(paste("3a) y está presente en", RestMasCiudades$cantidad ,"ciudades"))
-# R: "3a) El restaurant que tiene presencia en la mayor cantidad de ciudades distintas es:  baskin robbins"
-#    "3a) y está presente en 49 ciudades"
+print(paste("3b) El restaurant que tiene presencia en la mayor cantidad de ciudades distintas es: ", RestMasCiudades$label))
+print(paste("3b) y está presente en", RestMasCiudades$cantidad ,"ciudades"))
+# R: "3b) El restaurant que tiene presencia en la mayor cantidad de ciudades distintas es:  baskin robbins"
+#    "3b) y está presente en 49 ciudades"
 
 
 # P3c) (5pt) Diremos que un restaurant posee sucursales si en la tabla general
@@ -220,20 +221,16 @@ RestMasSuc <- head(general %>%
 # Reordenamiento de los datos de mayor a menor, según cantidad de sucursales
 RestMasSuc$label <- reorder(RestMasSuc$label, -RestMasSuc$cantidad) 
 
-# Creación del gráfico
-Graf_001 <- ggplot(RestMasSuc, aes(label, cantidad )) + 
-                   geom_col() 
-
-# Se agrega títulos de los ejes y del gráfico, también se agrega etiqueta 
-# de cantidad de sucursales
-Graf_001 <- Graf_001 + xlab("Restaurants") + ylab("Cantidad de Sucursales") + 
-            ggtitle("Total de Sucursales por Restaurants") + 
-            geom_text(aes(label = cantidad), vjust = -0.5) +
-            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-
 # Se despliega el gráfico
-Graf_001
-
+RestMasSuc %>%
+  ggplot(aes(label, cantidad )) + 
+  geom_col(alpha = 0.8) +
+  xlab("Restaurants") + 
+  ylab("Cantidad de Sucursales") +
+  ggtitle("Total de Sucursales por Restaurants") + 
+  geom_text(aes(label = cantidad), vjust = -0.5) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust= 1))
+  
 ### Preguntas 1.4
 # P4a) (4pts) Genere una tabla llamada resumen, que contenga la siguiente
 #             información:
@@ -259,6 +256,30 @@ Graf_001
 #
 #
 #
+# Creación de tabla con Cantidad y valoración promedio de restaurantes 
+# por cada ciudad y tipo de comida
+CantCiudadComida <- general %>%
+                      inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+                      select(city, food_type, review) %>%
+                      group_by(city, food_type) %>%
+                      summarise(n_rest = n(), 
+                                review_prom = mean(review), 
+                                .groups = 'drop')
+
+# Creación de tabla con cantidad total y valoración promedio de los 
+# restaurantes por cada ciudad
+TotRestPronCiud <- general %>%
+                     inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+                     group_by(city) %>%
+                     summarise(total_rest = n(), 
+                               review_prom_city = mean(review),
+                               .groups = 'drop')
+
+# Creación de la tabla resumen
+resumen = ""
+resumen <- CantCiudadComida %>%
+             inner_join(TotRestPronCiud, by =  c("city" = "city")) %>%
+             arrange(desc(n_rest))
 
 
 # P4b) (2pts) Basado en la tabla anterior, construya dos nuevas columnas llamadas
@@ -271,6 +292,20 @@ Graf_001
 #                  valoración promedio de los resturants de la misma ciudad.
 #                  (review_prom/review_prom_city)
 #
+
+# Se agrega a "resumen" la columna "density_food_type" que corresponde al 
+# cuociente entre le total de restaurants por tipo de comida y ciudad, 
+# respecto del total de restaurantes de la ciudad.
+resumen <- resumen %>%
+             mutate(density_food_type = n_rest / total_rest) 
+
+# Se agrega a "resumen" la columna "ratio_review" que representa al cuociente 
+# entre la valoración del restaurant por tipo de comida y ciudad, respecto de la
+#  valoración promedio de los resturants de la misma ciudad
+resumen <- resumen %>%
+             mutate(ratio_review = review_prom / review_prom_city) 
+
+#
 # P4c) (3pts) Mediante un gráfico de dispersión, muestre la relación entre
 #             density_food_type y ratio_review. Investigue sobre el parámetro
 #             alpha dentro de la capa geométrica para una mejor visualizaciónd
@@ -278,16 +313,38 @@ Graf_001
 #             base en él, indique si cabe la posibilidad de establecer algún
 #             tipo de dependencia entre density_food_type y ratio_review.
 
+# Creación del gráfico
+resumen %>%
+  ggplot() +
+  aes(x = density_food_type, y = ratio_review) +
+  xlab("Desnsidad por tipo de comida") +
+  ylab("Ratio reseña") +
+  ggtitle("Densidad vs. Reseña") +
+  geom_point(alpha = 0.1) +
+  geom_smooth(method = "lm")
 
 # Preguntas 1.5
 # P5a) (3pts) En la tabla resumen creada en P4a), genere una nueva columna
 #             llamada type_review, que contenga "review alto",
 #             si ratio_review >= 1 y "review bajo" ratio_review < 1.
 #             ¿Qué indica esta variable? Comente.
+resumen <- resumen %>%
+             mutate(type_review = ifelse(ratio_review >= 1, 
+                                         "review alto", 
+                                         "review bajo"))
+                    
+
 # P5b) (3pts) Para cada type_review, muestre a través de un gráfico de
 #             cajas (boxplot), la distribución de la densidad del tipo de
-#             comidadensity_food_type. ¿Qué puede observar?
-
+#             comida density_food_type. ¿Qué puede observar?
+resumen %>%
+  ggplot() +
+  aes(x = type_review, y = density_food_type.) +
+  xlab("Tipo de reseña") +
+  ylab("Densidad por tipo de comida") +
+  ggtitle("Tipo de Reseña vs. Densidad Tipo comida") +
+  boxplot(alpha = 0.1) +
+  geom_smooth(method = "lm")
 
 ### Pregunta 1.6
 # P6a) (2pts) Determine cuáles son las iguientes ciudades:
