@@ -7,6 +7,7 @@
 ####### Librerias a utilizar
 library("dplyr")
 library("ggplot2")
+library("magrittr")
 
 
 ### Sección 1
@@ -34,7 +35,7 @@ library("ggplot2")
 ### Preliminar
 # Cargue los archivos indicados previamente en dos variables, una llamada
 # general y otra location para generalinfo.csv y location.csv respectivamente.
-RutaBase = getwd()
+RutaBase = "/home/carlos/repos/Curso_R/control_002" #getwd()
 RutaGeneral <- paste(RutaBase, "/datasets/generalinfo.csv", sep = "")
 general <- read.csv(RutaGeneral)
 RutaLocation <- paste(RutaBase, "/datasets/location.csv", sep = "")
@@ -45,34 +46,28 @@ location <- read.csv(RutaLocation)
 ############################## Sección 1 ##############################
 ### Preguntas 1.1
 # P1a) (1pt) Basándose en a tabla general, ¿cuántos restaurants distintos hay en total?
-# summary(general)
-#Restoranes <- count(general,label)
-#Restoranes <- distinct(general,label)
-#Restoranes
-Restoranes <- general %>%
-                distinct(label) %>%
-                select(label)
+CantRestoranesDist <- general %>%
+                        distinct(label) %>%
+                        count()
 
-print(paste("1a) La cantidad de restaurants distintos es: ", length(Restoranes$label)))
+print(paste("1a) La cantidad de restaurants distintos es: ", CantRestoranesDist))
 #R: "1a) La cantidad de restaurants distintos es:  7606"
 
 # P1b) (1pt) ¿En cuántos tipos de comida diferentes se clasifican los restaurants?
-#TipoComida <- count(general, food_type)
 TipoComida <- general %>%
                 distinct(food_type) %>%
-                select(food_type)
+                count()
 
-print(paste("1b) Los tipos de comida diferentes se clasifican los restaurants son: ", length(TipoComida$food_type)))
-# R: "1b) Los tipos de comida diferentes se clasifican los restaurants son:  145"
+print(paste("1b) La Cantidad de tipos de comida diferentes que se clasifican los restaurants son: ", TipoComida))
+# R: "1b) La Cantidad de tipos de comida diferentes que se clasifican los restaurants son:  145"
 
 
 # P1c) (2pt) ¿Cuántas ciudades distintas considera el sondeo?
-#Ciudades <- count(location, city)
-Ciudades <- location %>%
-              distinct(city) %>%
-              select(city)
+CantCiudadesDist <- location %>%
+                      distinct(city) %>%
+                      count()
 
-print(paste("1c) La cantidad de ciudades distintas considera el sondeo es: ", length(Ciudades$city)))
+print(paste("1c) La cantidad de ciudades distintas considera el sondeo es: ", CantCiudadesDist))
 # R: "1c) La cantidad de ciudades distintas considera el sondeo es:  167"
 
 
@@ -82,11 +77,10 @@ print("1d) El tipo de comida y ciudad de restaurant 'great wall restaurant' es: 
 general %>%
   inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
   filter(label == "great wall restaurant") %>%
-  select(label, food_type, city)
-# R:   label                   food_type          city
-#    1 great wall restaurant   chinese            san francisco
-#    2 great wall restaurant   chinese            san leandro
-
+  select(food_type, city)
+# R:  food_type    city
+# 1   chinese      san francisco
+# 2   chinese      san leandro
 
 # P1e) (2pt) ¿Cuántos restaurantes de la ciudad de san francisco tienen calificación
 #             mayor o igual a 3.8 y venden comida vegetariana (vegetarian) ?
@@ -149,22 +143,60 @@ head(TipoJaponesa, 3)
 #            calcula el promedio de las valoraciones medias (promedio de review)
 #            por cada ciudad, y escoje aquella con mayor review promedio.
 #            ¿Qué ciudad escoge?
+Promedio <- general %>%
+              inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+              group_by(city) %>%
+              summarize(promedio = mean(review), .groups = 'drop') %>%
+              arrange(desc(promedio))
 
+head(Promedio,1)
+print(paste("2d) la ciudad que escojo es:", head(Promedio$city,1)))
+# R: "2d) la ciudad que escojo es: cerritos"
 
 # P2e) (2pt) Cuál es la ciudad con mejor valoración promedio de restaurantes
 #            tipo "barbeque"
+PromedioBarbeque <- general %>%
+                      inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+                      filter(food_type == "barbeque") %>%
+                      group_by(city) %>%
+                      summarize(promedio = mean(review), .groups = 'drop') %>%
+                      arrange(desc(promedio))
 
-
-
-
+print(paste("2e) la ciudad con mejor valoración promedio de restaurantes tipo barbeque es:", head(PromedioBarbeque$city,1)))
+# R: "2e) la ciudad con mejor valoración promedio de restaurantes tipo barbeque es: pleasant hill"
 
 ### Preguntas 1.3
 # P3a) (4pt) En la pregunta 1d), se pudo observar que un mismo restaurant puede
 #            estar presente en más de una ciudad. ¿Cuántos restaurants tienen
 #            esta característica, es decir están en más de una ciudad distinta?
 #            De ser de utilidad puede investigar y utilizar la función distinct().
+CantRestEnMasCiudad <- general %>%
+                         inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+                         distinct(label, city) %>%
+                         group_by(label) %>%
+                         summarise(cantidad = n(), .groups = 'drop') %>%
+                         filter(cantidad > 1) %>%
+                         count()
+
+print(paste("3a) La cantidad de restaurants tienen que están en más de una ciudad distinta es:", CantRestEnMasCiudad))
+# R: "3a) La cantidad de restaurants tienen que están en más de una ciudad distinta es: 559"
+
+
 # P3b) (2pt) ¿Cuál es el restaurant que tiene presencia en la mayor cantidad de
 #             ciudades distintas?¿En cuántas ciudades está presente?
+RestMasCiudades <- head(general %>%
+                          inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+                          distinct(label, city) %>%
+                          group_by(label) %>%
+                          summarise(cantidad = n(), .groups = 'drop') %>%
+                          arrange(desc(cantidad)), 1)
+
+print(paste("3a) El restaurant que tiene presencia en la mayor cantidad de ciudades distintas es: ", RestMasCiudades$label))
+print(paste("3a) y está presente en", RestMasCiudades$cantidad ,"ciudades"))
+# R: "3a) El restaurant que tiene presencia en la mayor cantidad de ciudades distintas es:  baskin robbins"
+#    "3a) y está presente en 49 ciudades"
+
+
 # P3c) (5pt) Diremos que un restaurant posee sucursales si en la tabla general
 #            existe más de un registro con el mismo label. Muestre, mediante un
 #            gráfico de barras, los 15 restaurants con mayor cantidad de
@@ -179,8 +211,28 @@ head(TipoJaponesa, 3)
 #                 que muestre la cantidad de sucursales respectivas.
 #               - Las leyendas de cada gráfico no deben visualizarse
 
+RestMasSuc <- head(general %>%
+                     inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+                     group_by(label) %>%
+                     summarise(cantidad = n(), .groups = 'drop') %>%
+                     arrange(desc(cantidad)),15)
 
+# Reordenamiento de los datos de mayor a menor, según cantidad de sucursales
+RestMasSuc$label <- reorder(RestMasSuc$label, -RestMasSuc$cantidad) 
 
+# Creación del gráfico
+Graf_001 <- ggplot(RestMasSuc, aes(label, cantidad )) + 
+                   geom_col() 
+
+# Se agrega títulos de los ejes y del gráfico, también se agrega etiqueta 
+# de cantidad de sucursales
+Graf_001 <- Graf_001 + xlab("Restaurants") + ylab("Cantidad de Sucursales") + 
+            ggtitle("Total de Sucursales por Restaurants") + 
+            geom_text(aes(label = cantidad), vjust = -0.5) +
+            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+# Se despliega el gáfico
+Graf_001
 
 ### Preguntas 1.4
 # P4a) (4pts) Genere una tabla llamada resumen, que contenga la siguiente
@@ -207,6 +259,8 @@ head(TipoJaponesa, 3)
 #
 #
 #
+
+
 # P4b) (2pts) Basado en la tabla anterior, construya dos nuevas columnas llamadas
 #             density_food_type y ratio_review que contengan la siguiente información:
 #                - density_food_type: Representa el cuociente entre le total de
