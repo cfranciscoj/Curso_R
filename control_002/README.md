@@ -17,7 +17,7 @@ Una vez finalizado el desarrollo del test, deberá entregarlo teniendo en cuenta
 
  1. Descargue el notebook en **formato HTML** (uno por pareja), e indique en el nombre del archivo los nombres de los integrantes, Control1_nombres_integrantes.html.
     En caso de trabajar en Rstudio, deberá enviar el script de extensión *.R con el siguiente nombre: Control2_nombres_integrantes.R , **procurando indicar con comentarios claros, qué pregunta está respondiendo en cada caso**.
- * Envíe el archivo al correo angelubilla@gmail.com, con copia a majorquev@gmail.com con el asunto "DBDN-R-C2: 'nombre y apellido de los integrantes' "
+ * Envíe el archivo al correo con el asunto "DBDN-R-C2: 'nombre y apellido de los integrantes' "
 
 **NOTA**:
    * Los correos cuyo asunto no comiencen con "DBDN-R-C2" no llegarán a destino y por ende no serán calificados.
