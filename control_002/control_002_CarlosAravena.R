@@ -231,7 +231,7 @@ Graf_001 <- Graf_001 + xlab("Restaurants") + ylab("Cantidad de Sucursales") +
             geom_text(aes(label = cantidad), vjust = -0.5) +
             theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
-# Se despliega el gáfico
+# Se despliega el gráfico
 Graf_001
 
 ### Preguntas 1.4
