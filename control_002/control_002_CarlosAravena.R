@@ -46,40 +46,111 @@ location <- read.csv(RutaLocation)
 ### Preguntas 1.1
 # P1a) (1pt) Basándose en a tabla general, ¿cuántos restaurants distintos hay en total?
 # summary(general)
-Restoranes <- count(general,label)
+#Restoranes <- count(general,label)
+#Restoranes <- distinct(general,label)
+#Restoranes
+Restoranes <- general %>%
+                distinct(label) %>%
+                select(label)
+
 print(paste("1a) La cantidad de restaurants distintos es: ", length(Restoranes$label)))
 #R: "1a) La cantidad de restaurants distintos es:  7606"
 
 # P1b) (1pt) ¿En cuántos tipos de comida diferentes se clasifican los restaurants?
-TipoComida <- count(general, food_type)
+#TipoComida <- count(general, food_type)
+TipoComida <- general %>%
+                distinct(food_type) %>%
+                select(food_type)
+
 print(paste("1b) Los tipos de comida diferentes se clasifican los restaurants son: ", length(TipoComida$food_type)))
 # R: "1b) Los tipos de comida diferentes se clasifican los restaurants son:  145"
 
 
 # P1c) (2pt) ¿Cuántas ciudades distintas considera el sondeo?
-Ciudades <- count(location, city)
+#Ciudades <- count(location, city)
+Ciudades <- location %>%
+              distinct(city) %>%
+              select(city)
+
 print(paste("1c) La cantidad de ciudades distintas considera el sondeo es: ", length(Ciudades$city)))
 # R: "1c) La cantidad de ciudades distintas considera el sondeo es:  167"
 
 
 # P1d) (2pt) ¿Indique el tipo de comida y las ciudades donde se encuentra el restaurant
 #             "great wall restaurant"?
+print("1d) El tipo de comida y ciudad de restaurant 'great wall restaurant' es: ")
+general %>%
+  inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+  filter(label == "great wall restaurant") %>%
+  select(label, food_type, city)
+# R:   label                   food_type          city
+#    1 great wall restaurant   chinese            san francisco
+#    2 great wall restaurant   chinese            san leandro
 
 
 # P1e) (2pt) ¿Cuántos restaurantes de la ciudad de san francisco tienen calificación
 #             mayor o igual a 3.8 y venden comida vegetariana (vegetarian) ?
 #
+CantRestVegan <- general %>%
+                   inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+                   filter(city == "san francisco" & food_type == "vegetarian" & review >= 3.8) %>%
+                   count()
+print(paste("1e) La cantidad de restaurantes en la ciudad de san francisco que tienen calificación mayor o igual a 3.8 y venden comida vegetariana es:", CantRestVegan))
+# R: 1e) La cantidad de restaurantes en la ciudad de san francisco que tienen calificación mayor o igual a 3.8 y venden comida vegetariana es: 3"
+
 
 ### Preguntas 1.2
 # P2a) (2pt) Sin considerar San Francisco, ¿cuál es la ciudad con mayor cantidad
 #            de restaurantes sondeados?
+CiudadMayorSondeo <- location %>%
+                       filter(city != "san francisco") %>%
+                       group_by(city) %>%
+                       summarise(cantidad = n(), .groups = 'drop') %>%
+                       filter(cantidad == max(cantidad))
+
+print(paste("2a) la ciudad con mayor cantidad de restaurantes sondeados, sin considerar San Francisco es:", CiudadMayorSondeo$city))
+#R: "2a) la ciudad con mayor cantidad de restaurantes sondeados, sin considerar San Francisco es: san jose"
+
+
+
 # P2b) (1pt) ¿Cuáles son los 3 tipos de comida ofrecido más comunes ?
-# P2c) (2pt) Sin con siderar San Francisco, ¿Cuáles son las 3 ciudades con mayor
+Comunes <- general %>%
+             group_by(food_type) %>%
+             summarise(cantidad = n(), .groups = 'drop') %>%
+             arrange(desc(cantidad))
+
+print("2b) Los 3 tipos de comida ofrecido más comunes son: ")
+head(Comunes, 3)
+# R: 2b) Los 3 tipos de comida ofrecido más comunes son:
+#   food_type cantidad
+# 1 cafe      1098
+# 2 chinese   1075
+# 3 pizza     959
+
+
+# P2c) (2pt) Sin considerar San Francisco, ¿Cuáles son las 3 ciudades con mayor
 #            cantidad de restaurants que ofrecen comido tipo japanese?
+TipoJaponesa <- general %>%
+                  inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+                  filter(city != "san francisco" & food_type == "japanese") %>%
+                  group_by(city) %>%
+                  summarise(cantidad = n(), .groups = 'drop') %>%
+                  arrange(desc(cantidad))
+
+print("2c) Las 3 ciudades con mayor cantidad de restaurants que ofrecen comido tipo japanese son: ")
+head(TipoJaponesa, 3)
+# R: 2c) Las 3 ciudades con mayor cantidad de restaurants que ofrecen comido tipo japanese son:
+#   city       cantidad
+# 1 san jose   28
+# 2 berkeley   14
+# 3 oakland    14
+
 # P2d) (2pt) Usted decide viajar a una de las ciudades en cuestión, para ello
 #            calcula el promedio de las valoraciones medias (promedio de review)
 #            por cada ciudad, y escoje aquella con mayor review promedio.
 #            ¿Qué ciudad escoge?
+
+
 # P2e) (2pt) Cuál es la ciudad con mejor valoración promedio de restaurantes
 #            tipo "barbeque"
 
