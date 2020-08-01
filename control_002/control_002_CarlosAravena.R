@@ -211,7 +211,6 @@ print(paste("3b) y está presente en", RestMasCiudades$cantidad ,"ciudades"))
 #               - Incluya tiquetas en la parte superior de cada barra,
 #                 que muestre la cantidad de sucursales respectivas.
 #               - Las leyendas de cada gráfico no deben visualizarse
-
 RestMasSuc <- head(general %>%
                      inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
                      group_by(label) %>%
@@ -339,21 +338,44 @@ resumen <- resumen %>%
 #             comida density_food_type. ¿Qué puede observar?
 resumen %>%
   ggplot() +
-  aes(x = type_review, y = density_food_type.) +
+  aes(x = type_review, y = density_food_type) +
   xlab("Tipo de reseña") +
   ylab("Densidad por tipo de comida") +
   ggtitle("Tipo de Reseña vs. Densidad Tipo comida") +
-  boxplot(alpha = 0.1) +
-  geom_smooth(method = "lm")
+  geom_boxplot(alpha = 0.1) 
 
 ### Pregunta 1.6
-# P6a) (2pts) Determine cuáles son las iguientes ciudades:
+# P6a) (2pts) Determine cuáles son las siguientes ciudades:
 #
 #     Ciudad 1: Ciudad con mayor cantidad de restaurants (posición 1).
 #     Ciudad 2: Ciudad ubicada en la posición 5, al ordenar las ciudades
 #               de manera decreciente según cantidad de restaurants.
 #     Ciudad 3: Ciudad ubicada en la posición 10, al ordenar las ciudades
 #               de manera decreciente según cantidad de restaurants.
+Ciudades_1_5_10 <- resumen %>%
+                     group_by(city) %>%
+                     summarise(cantidad = n(), .groups = 'drop') %>%
+                     arrange(desc(cantidad)) %>%
+                     slice(c(1, 5, 10)) %>%
+                     select(city)
+#Ciudades_1_5_10
+LargoCiudades <- length(Ciudades_1_5_10$city)
+i <- 1
+while (i <= LargoCiudades) {
+  PosicionCiudad <- case_when(
+    i == 1 ~ 1,
+    i == 2 ~ 5,
+    i == 3 ~ 10,
+    i > 3 ~ i
+   )
+  print(paste("6a) La ciudad en la Posición",PosicionCiudad,"es", Ciudades_1_5_10[i,1]))
+  i <- i + 1
+}
+
+# R: "6a) La ciudad en la Posición 1 es san francisco"
+#    "6a) La ciudad en la Posición 5 es palo alto"
+#    "6a) La ciudad en la Posición 10 es santa clara"
+
 
 
 # P6b) (6pts) Usted deberá graficar la cantidad de restaurants, por cada uno
@@ -380,7 +402,7 @@ resumen %>%
 #
 # NOTA: Como referencia, su gráfico debe contener los mismos elementos del cuarto
 #       gráfico, "Cantidad de restaurantes por tipo de comida y ciudad", que se
-#       en el README.md (no necesariamente los mismos valores de los elementos que lo componen).
+#       muestran en el README.md (no necesariamente los mismos valores de los elementos que lo componen).
 #       Por otro lado, no es necesaria la utilización de la misma paleta de
 #       colores. En este gráfico se muestran las ciudades de posición 1, 2 y 3.
 #       Ustede deberá visualizar las 1, 5 y 10.
