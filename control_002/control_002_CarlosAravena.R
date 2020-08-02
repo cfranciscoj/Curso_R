@@ -156,14 +156,18 @@ TipoJaponesa %>%
 #            ¿Qué ciudad escoge?
 Promedio <- general %>%
               inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+              filter(city != "san francisco" & food_type == "japanese") %>%
+              inner_join(TipoJaponesa, by = c("city" = "city")) %>%
               group_by(city) %>%
-              summarize(promedio = mean(review), .groups = 'drop') %>%
+              summarise(promedio = mean(review), 
+                        .groups = 'drop') %>%
               arrange(desc(promedio)) %>%
-              head(1)
+              head(1) 
+
 
 
 print(paste("2d) la ciudad que escojo es:", Promedio$city))
-# R: "2d) la ciudad que escojo es: cerritos"
+# R: "2d) la ciudad que escojo es: san jose"
 
 # P2e) (2pt) Cuál es la ciudad con mejor valoración promedio de restaurantes
 #            tipo "barbeque"
@@ -330,7 +334,7 @@ resumen <- resumen %>%
 
 # Se agrega a "resumen" la columna "ratio_review" que representa al cuociente 
 # entre la valoración del restaurant por tipo de comida y ciudad, respecto de la
-#  valoración promedio de los resturants de la misma ciudad
+# valoración promedio de los resturants de la misma ciudad
 resumen <- resumen %>%
              mutate(ratio_review = review_prom / review_prom_city) 
 
@@ -351,12 +355,14 @@ resumen %>%
   geom_point(fill="#9DB9E3",
              alpha = 0.1) +
   geom_smooth(orientation = "x",
-              method = "lm",
+              method = "gam",
+              formula = y ~ s(x , bs = "cs"),
               span = 0.3) +
   xlab("Desnsidad por tipo de comida") +
   ylab("Ratio reseña") +
   ggtitle("Densidad vs. Reseña") 
-# R: A primera vista no hay hay algún tipo de dependencia.
+# R: No existe algún tipo de dependencia.
+
 #  cor(resumen$density_food_type, 
 #      resumen$ratio_review, 
 #      method = c("spearman"))
@@ -372,7 +378,16 @@ resumen <- resumen %>%
              mutate(type_review = ifelse(ratio_review >= 1, 
                                          "review alto", 
                                          "review bajo"))
-                    
+# R: La valoración del restaurant por tipo de comida y ciudad, es alto o bajo
+#    respecto de la valoración promedio de los resturants de la misma ciudad 
+#    Cuando ratio_review tiene valor "review alto", que es obtenido cuando es 
+#    mayor o igual a uno, indica que ese restaurant por tipo de comida y ciudad 
+#    respecto de la valoración promedio de los resturants de la misma ciudad,
+#    es alta. Por el contrario cuando ratio_review tiene valor "review bajo",
+#    que es obtenido cuando es menor a uno, su valoración es baja.
+
+
+
 
 # P5b) (3pts) Para cada type_review, muestre a través de un gráfico de
 #             cajas (boxplot), la distribución de la densidad del tipo de
@@ -401,9 +416,9 @@ resumen %>%
 #               de manera decreciente según cantidad de restaurants.
 Ciudades_1_5_10 <- resumen %>%
                      group_by(city) %>%
-                     summarise(cantidad = n(), 
+                     summarise(cantidad = sum(n_rest), 
                                .groups = 'drop') %>%
-                     arrange(desc(cantidad)) %>%
+                     arrange(desc(cantidad), desc(city)) %>%
                      slice(c(1, 5, 10)) %>%
                      select(city)
 #Ciudades_1_5_10
@@ -420,8 +435,8 @@ while (i <= LargoCiudades) {
   i <- i + 1
 }
 # R: "6a) La ciudad en la Posición 1 es san francisco"
-#    "6a) La ciudad en la Posición 5 es palo alto"
-#    "6a) La ciudad en la Posición 10 es santa clara"
+#    "6a) La ciudad en la Posición 5 es fremont"
+#    "6a) La ciudad en la Posición 10 es sunnyvale"
 
 # P6b) (6pts) Usted deberá graficar la cantidad de restaurants, por cada uno
 #             de los 5 tipos de comida más frecuentes dentro de la ciudad
