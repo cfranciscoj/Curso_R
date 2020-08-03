@@ -38,7 +38,7 @@ library("magrittr")
 # Cargue los archivos indicados previamente en dos variables, una llamada
 # general y otra location para generalinfo.csv y location.csv respectivamente.
 
-#RutaBase = "/home/carlos/repos/Curso_R/control_002"
+RutaBase = "/home/carlos/repos/Curso_R/control_002"
 RutaBase = getwd()
 RutaGeneral <- paste(RutaBase, "/datasets/generalinfo.csv", sep = "")
 general <- read.csv(RutaGeneral)
@@ -103,7 +103,7 @@ print(paste("1e) La cantidad de restaurantes en la ciudad de san francisco que t
 CiudadMayorSondeo <- location %>%
                        filter(city != "san francisco") %>%
                        group_by(city) %>%
-                       summarise(cantidad = n(), 
+                       summarise(cantidad = n(),
                                  .groups = 'drop') %>%
                        filter(cantidad == max(cantidad))
 
@@ -115,7 +115,7 @@ print(paste("2a) la ciudad con mayor cantidad de restaurantes sondeados, sin con
 # P2b) (1pt) ¿Cuáles son los 3 tipos de comida ofrecido más comunes?
 Comunes <- general %>%
              group_by(food_type) %>%
-             summarise(cantidad = n(), 
+             summarise(cantidad = n(),
                        .groups = 'drop') %>%
              arrange(desc(cantidad)) %>%
              head(3)
@@ -136,7 +136,7 @@ TipoJaponesa <- general %>%
                   inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
                   filter(city != "san francisco" & food_type == "japanese") %>%
                   group_by(city) %>%
-                  summarise(cantidad = n(), 
+                  summarise(cantidad = n(),
                             .groups = 'drop') %>%
                   arrange(desc(cantidad)) %>%
                   head(3)
@@ -159,10 +159,10 @@ Promedio <- general %>%
               filter(city != "san francisco" & food_type == "japanese") %>%
               inner_join(TipoJaponesa, by = c("city" = "city")) %>%
               group_by(city) %>%
-              summarise(promedio = mean(review), 
+              summarise(promedio = mean(review),
                         .groups = 'drop') %>%
               arrange(desc(promedio)) %>%
-              head(1) 
+              head(1)
 
 
 
@@ -175,7 +175,7 @@ PromedioBarbeque <- general %>%
                       inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
                       filter(food_type == "barbeque") %>%
                       group_by(city) %>%
-                      summarize(promedio = mean(review), 
+                      summarize(promedio = mean(review),
                                 .groups = 'drop') %>%
                       arrange(desc(promedio)) %>%
                       head(1) %>%
@@ -193,7 +193,7 @@ CantRestEnMasCiudad <- general %>%
                          inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
                          distinct(label, city) %>%
                          group_by(label) %>%
-                         summarise(cantidad = n(), 
+                         summarise(cantidad = n(),
                                    .groups = 'drop') %>%
                          filter(cantidad > 1) %>%
                          count()
@@ -208,7 +208,7 @@ RestMasCiudades <- general %>%
                      inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
                      distinct(label, city) %>%
                      group_by(label) %>%
-                     summarise(cantidad = n(), 
+                     summarise(cantidad = n(),
                                .groups = 'drop') %>%
                      arrange(desc(cantidad)) %>%
                      head(1)
@@ -235,35 +235,35 @@ print(paste("3b) y está presente en", RestMasCiudades$cantidad ,"ciudades"))
 RestMasSuc <- general %>%
                      inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
                      group_by(label) %>%
-                     summarise(cantidad = n(), 
+                     summarise(cantidad = n(),
                                .groups = 'drop') %>%
                      arrange(desc(cantidad)) %>%
                      head(15)
 
 # Reordenamiento de los datos según cantidad de sucursales
-#RestMasSuc$label <- reorder(RestMasSuc$label, RestMasSuc$cantidad) 
+#RestMasSuc$label <- reorder(RestMasSuc$label, RestMasSuc$cantidad)
 
 # Se despliega el gráfico
 RestMasSuc %>%
-  ggplot(aes(x = reorder(label, 
-                         cantidad), 
-             y = cantidad)) + 
-  geom_bar(stat='identity', 
-           position='dodge', 
+  ggplot(aes(x = reorder(label,
+                         cantidad),
+             y = cantidad)) +
+  geom_bar(stat='identity',
+           position='dodge',
            alpha = 0.8,
            aes(fill = cantidad)) +
   scale_fill_gradient(low = "#2c5982", high = "#329DA8", na.value = NA) +
   labs(title = "Top 15 restaurants con mayor cantidad de sucursales",
        x ="Restaurants",
        y = "Cantidad de Sucursales") +
-  geom_label(aes(x = label, y = cantidad, label = cantidad), 
+  geom_label(aes(x = label, y = cantidad, label = cantidad),
              label.size =0.025,
              position = "stack",
              vjust = 0) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust= 1)) +
   guides(fill = FALSE) +
   coord_flip()
-  
+
 
 ### Preguntas 1.4
 # P4a) (4pts) Genere una tabla llamada resumen, que contenga la siguiente
@@ -290,22 +290,22 @@ RestMasSuc %>%
 #
 #
 #
-# Creación de tabla con Cantidad y valoración promedio de restaurantes 
+# Creación de tabla con Cantidad y valoración promedio de restaurantes
 # por cada ciudad y tipo de comida
 CantCiudadComida <- general %>%
                       inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
                       select(city, food_type, review) %>%
                       group_by(city, food_type) %>%
-                      summarise(n_rest = n(), 
-                                review_prom = mean(review), 
+                      summarise(n_rest = n(),
+                                review_prom = mean(review),
                                 .groups = 'drop')
 
-# Creación de tabla con cantidad total y valoración promedio de los 
+# Creación de tabla con cantidad total y valoración promedio de los
 # restaurantes por cada ciudad
 TotRestPronCiud <- general %>%
                      inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
                      group_by(city) %>%
-                     summarise(total_rest = n(), 
+                     summarise(total_rest = n(),
                                review_prom_city = mean(review),
                                .groups = 'drop')
 
@@ -326,17 +326,17 @@ resumen <- CantCiudadComida %>%
 #                  (review_prom/review_prom_city)
 #
 
-# Se agrega a "resumen" la columna "density_food_type" que corresponde al 
-# cuociente entre le total de restaurants por tipo de comida y ciudad, 
+# Se agrega a "resumen" la columna "density_food_type" que corresponde al
+# cuociente entre le total de restaurants por tipo de comida y ciudad,
 # respecto del total de restaurantes de la ciudad.
 resumen <- resumen %>%
-             mutate(density_food_type = n_rest / total_rest) 
+             mutate(density_food_type = n_rest / total_rest)
 
-# Se agrega a "resumen" la columna "ratio_review" que representa al cuociente 
+# Se agrega a "resumen" la columna "ratio_review" que representa al cuociente
 # entre la valoración del restaurant por tipo de comida y ciudad, respecto de la
 # valoración promedio de los resturants de la misma ciudad
 resumen <- resumen %>%
-             mutate(ratio_review = review_prom / review_prom_city) 
+             mutate(ratio_review = review_prom / review_prom_city)
 
 #
 # P4c) (3pts) Mediante un gráfico de dispersión, muestre la relación entre
@@ -348,7 +348,7 @@ resumen <- resumen %>%
 
 # Creación del gráfico
 resumen %>%
-  ggplot(aes(x = density_food_type, 
+  ggplot(aes(x = density_food_type,
              y = ratio_review,
              color=density_food_type))  +
   labs(colour="Densidad por\ntipo de comida") +
@@ -360,11 +360,11 @@ resumen %>%
               span = 0.3) +
   xlab("Desnsidad por tipo de comida") +
   ylab("Ratio reseña") +
-  ggtitle("Densidad vs. Reseña") 
+  ggtitle("Densidad vs. Reseña")
 # R: No existe algún tipo de dependencia.
 
-#  cor(resumen$density_food_type, 
-#      resumen$ratio_review, 
+#  cor(resumen$density_food_type,
+#      resumen$ratio_review,
 #      method = c("spearman"))
 #     -0.1077813
 
@@ -375,13 +375,13 @@ resumen %>%
 #             si ratio_review >= 1 y "review bajo" ratio_review < 1.
 #             ¿Qué indica esta variable? Comente.
 resumen <- resumen %>%
-             mutate(type_review = ifelse(ratio_review >= 1, 
-                                         "review alto", 
+             mutate(type_review = ifelse(ratio_review >= 1,
+                                         "review alto",
                                          "review bajo"))
 # R: La valoración del restaurant por tipo de comida y ciudad, es alto o bajo
-#    respecto de la valoración promedio de los resturants de la misma ciudad 
-#    Cuando ratio_review tiene valor "review alto", que es obtenido cuando es 
-#    mayor o igual a uno, indica que ese restaurant por tipo de comida y ciudad 
+#    respecto de la valoración promedio de los resturants de la misma ciudad
+#    Cuando ratio_review tiene valor "review alto", que es obtenido cuando es
+#    mayor o igual a uno, indica que ese restaurant por tipo de comida y ciudad
 #    respecto de la valoración promedio de los resturants de la misma ciudad,
 #    es alta. Por el contrario cuando ratio_review tiene valor "review bajo",
 #    que es obtenido cuando es menor a uno, su valoración es baja.
@@ -393,16 +393,16 @@ resumen <- resumen %>%
 #             cajas (boxplot), la distribución de la densidad del tipo de
 #             comida density_food_type. ¿Qué puede observar?
 resumen %>%
-  ggplot(aes(x = type_review, 
+  ggplot(aes(x = type_review,
              y = density_food_type)) +
-  geom_boxplot(color="#4665F0", 
-               fill="#9DB9E3", 
+  geom_boxplot(color="#4665F0",
+               fill="#9DB9E3",
                alpha = 0.2) +
   xlab("Tipo de reseña") +
   ylab("Densidad por tipo de comida") +
   ggtitle("Tipo de Reseña vs. Densidad Tipo comida")
 # R: Podemos observar que para "review alto", los maximos están más distribuidos
-#    y para "review bajo", los máximos están más concentrados, para ambos, 
+#    y para "review bajo", los máximos están más concentrados, para ambos,
 #    la mayoría de las distribución por tipo de comida, está en primer quintil
 
 
@@ -414,29 +414,29 @@ resumen %>%
 #               de manera decreciente según cantidad de restaurants.
 #     Ciudad 3: Ciudad ubicada en la posición 10, al ordenar las ciudades
 #               de manera decreciente según cantidad de restaurants.
-Ciudades_1_5_10 <- resumen %>%
-                     group_by(city) %>%
-                     summarise(cantidad = sum(n_rest), 
-                               .groups = 'drop') %>%
-                     arrange(desc(cantidad), desc(city)) %>%
-                     slice(c(1, 5, 10)) %>%
-                     select(city)
-#Ciudades_1_5_10
-LargoCiudades <- length(Ciudades_1_5_10$city)
+
+
+CiudadesBuscar <- c(1, 5, 10)
+CiudadSeleccionada <- resumen %>%
+                        group_by(city) %>%
+                        summarise(cantidad = sum(n_rest),
+                                  .groups = 'drop') %>%
+                        arrange(desc(cantidad), desc(city)) %>%
+                        slice(CiudadesBuscar) %>%
+                        select(city)
+
+LargoCiudades <- length(CiudadSeleccionada$city)
 i <- 1
 while (i <= LargoCiudades) {
-  PosicionCiudad <- case_when(
-    i == 1 ~ 1,
-    i == 2 ~ 5,
-    i == 3 ~ 10,
-    i > 3 ~ i
-   )
-  print(paste("6a) La ciudad en la Posición",PosicionCiudad,"es", Ciudades_1_5_10[i,1]))
+
+  PosicionCiudad <- CiudadesBuscar[i]
+  
+  print(paste("6a) La ciudad en la Posición",PosicionCiudad,"es", CiudadSeleccionada[i,"city"]))
   i <- i + 1
 }
 # R: "6a) La ciudad en la Posición 1 es san francisco"
 #    "6a) La ciudad en la Posición 5 es fremont"
-#    "6a) La ciudad en la Posición 10 es sunnyvale"
+#    "6a) La ciudad en la Posición 10 es palo alto"
 
 # P6b) (6pts) Usted deberá graficar la cantidad de restaurants, por cada uno
 #             de los 5 tipos de comida más frecuentes dentro de la ciudad
@@ -467,80 +467,58 @@ while (i <= LargoCiudades) {
 #       colores. En este gráfico se muestran las ciudades de posición 1, 2 y 3.
 #       Ustede deberá visualizar las 1, 5 y 10.
 
-Ciudad_01 <- general %>%
-             inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
-             inner_join(Ciudades_1_5_10, by = c("city" = "city")) %>%
-             group_by(food_type, city) %>%
-             summarise(cantidad = n(), 
-                       .groups = 'drop') %>%
-             arrange(desc(cantidad, city )) %>%
-             filter(city == Ciudades_1_5_10$city[1]) %>%
-             head(5)
+# LargoCiudades <- length(CiudadSeleccionada$city)
+CiudadesTipoComida <- data.frame(food_type         = character(), 
+                                 city              = character(), 
+                                 cantidad          = integer(), 
+                                 porcentaje        = character(), 
+                                 orden             = integer(), 
+                                 density_food_type = double()
+                                )
 
-Ciudad_01 <- Ciudad_01 %>%
-               inner_join(resumen, c("food_type" = "food_type" , "city" = "city")) %>%
-               group_by(food_type, city, cantidad, orden = 1)%>%
-               mutate(porcentaje = paste0(round(100 * density_food_type, 1), "%")) %>%
-               select(food_type, city, cantidad, porcentaje, orden, density_food_type)
+CantRestBuscar <- 5
+j <- 1
+while (j <= LargoCiudades) {
+  Ciudad <- general %>%
+              inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
+              inner_join(CiudadSeleccionada, by = c("city" = "city")) %>%
+              group_by(food_type, city) %>%
+              summarise(cantidad = n(),
+                        .groups = 'drop') %>%
+              arrange(desc(cantidad, city )) %>%
+              filter(city == CiudadSeleccionada$city[j]) %>%
+              head(5)
+
+  CiudadTipoComida <- Ciudad %>%
+                        inner_join(resumen, c("food_type" = "food_type" , "city" = "city")) %>%
+                        group_by(food_type, city, cantidad, orden = j)%>%
+                        mutate(porcentaje = paste0(round(100 * density_food_type, 1), "%")) %>%
+                        select(food_type, city, cantidad, porcentaje, orden, density_food_type)
   
-  
-Ciudad_05 <- general %>%
-               inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
-               inner_join(Ciudades_1_5_10, by = c("city" = "city")) %>%
-               group_by(food_type, city) %>%
-               summarise(cantidad = n(), 
-                         .groups = 'drop') %>%
-               arrange(desc(cantidad, city )) %>%
-               filter(city == Ciudades_1_5_10$city[2]) %>%
-               head(5) 
-
-Ciudad_05 <- Ciudad_05 %>%
-               inner_join(resumen, c("food_type" = "food_type" , "city" = "city")) %>%
-               group_by(food_type, city, cantidad, orden = 2)%>%
-               mutate(porcentaje = paste0(round(100 * density_food_type, 1), "%")) %>%
-               select(food_type, city, cantidad, porcentaje, orden, density_food_type)
-
-
-Ciudad_10 <- general %>%
-               inner_join(location, by = c("id_restaurant" = "id_rest")) %>%
-               inner_join(Ciudades_1_5_10, by = c("city" = "city")) %>%
-               group_by(food_type, city) %>%
-               summarise(cantidad = n(), 
-                         .groups = 'drop') %>%
-               arrange(desc(cantidad, city )) %>%
-               filter(city == Ciudades_1_5_10$city[3]) %>%
-               head(5)
-
-Ciudad_10 <- Ciudad_10 %>%
-               inner_join(resumen, c("food_type" = "food_type" , "city" = "city")) %>%
-               group_by(food_type, city, cantidad, orden = 3)%>%
-               mutate(porcentaje = paste0(round(100 * density_food_type, 1), "%")) %>%
-               select(food_type, city, cantidad, porcentaje, orden, density_food_type)
-
-
-CiudadesTipoComida <- rbind(Ciudad_01, Ciudad_05, Ciudad_10)
-
+  CiudadesTipoComida <- rbind(CiudadesTipoComida, CiudadTipoComida)
+  j <- j + 1
+}
 
 CiudadesTipoComida %>%
   ggplot(aes(x = reorder(city, orden), 
-             y = cantidad, 
+             y = cantidad,
              fill = food_type,
-             group = -density_food_type)) + 
-  geom_bar(stat='identity', 
-           position='dodge', 
+             group = -density_food_type)) +
+  geom_bar(stat='identity',
+           position='dodge',
            alpha = 0.8) +
   labs(title = "Cantidad de restaurants por tipo de comida y ciudad",
-       subtitle = "Incluye información de densidad del tipo de comida", 
+       subtitle = "Incluye información de densidad del tipo de comida",
        x ="Ciudad",
        y = "Total de restaurants") +
   scale_fill_discrete(name = "Tipo de comida") +
   geom_text(aes(city,
-                cantidad, 
+                cantidad,
                 label=porcentaje),
-            hjust=0.5, 
-            vjust=0, 
+            hjust=0.5,
+            vjust=0,
             size=3,
             position = position_dodge(width = 1)) +
-  theme(axis.text.x = element_text(angle = 0, 
-                                   vjust = 0.5, 
-                                   hjust = 0.5)) 
+  theme(axis.text.x = element_text(angle = 0,
+                                   vjust = 0.5,
+                                   hjust = 0.5))
