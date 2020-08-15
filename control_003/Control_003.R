@@ -101,6 +101,7 @@ library("tidyverse")
 # ###########################
 # En busca de la normalidad
 # ##########################
+#
 # Se sabe que una manera de estabilizar la variabilidad presente en una variable,
 # es estudiando su logaritmo. A continuación usted deberá estudiar el
 # comportamiento ddistribucional del loagritmo de la expectativa de vida.
@@ -237,7 +238,9 @@ library("tidyverse")
 # R:
 
 
+# ####################################
 # Análisis de los productos vendidos.
+# ####################################
 #
 # Con el objetivo de aumentar las ventas, se le solicita a usted analizar
 # los itmes y las ventas cruzadas entre los productos ofrecidos. Para ello
