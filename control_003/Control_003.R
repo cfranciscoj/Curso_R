@@ -48,10 +48,6 @@ library("tidyverse")
 # R:
 
 
-
-
-
-
 # P2) (3pts) Mediante un gráfico de puntos, visualice una comparativa entre
 #            la relación de ingresos y expectativa de vida, para los
 #            años 1052 y 2007. Para ello usted deberá replicar el siguiente
@@ -60,12 +56,6 @@ library("tidyverse")
 #            Grafico 002
 #
 # R:
-
-
-
-
-
-
 
 
 
