@@ -9,8 +9,14 @@
 library("gapminder")
 library("dplyr")
 library("ggplot2")
-library("arules")
-library("tidyverse")
+library("magrittr")
+library("corrplot")
+
+# #############################################################################
+# data(gapminder)
+# head(gapminder)
+# ##############################################################################
+
 
 # ################################ Sección 1 ###################################
 #
@@ -18,7 +24,7 @@ library("tidyverse")
 # Introducción
 # #############
 #
-# En esta seción usted generará un breve anáisis descriptivo de la evolución de
+# En esta sección usted generará un breve análisis descriptivo de la evolución de
 # la expectativa de vida de diferentes países. Para ello usted utilizará la
 # información disponible en el dataset gapminder del package del mismo nombre.
 # La información contenida en este dataset corresponde a la siguiente:
@@ -47,16 +53,54 @@ library("tidyverse")
 #
 # R:
 
+gapminder %>%
+  ggplot(aes(x = gdpPercap,
+             y = lifeExp,
+             color=year,
+             size = pop))  +
+  labs(colour="year") +
+  geom_point(fill="#9DB9E3",
+             alpha = 0.5) +
+  #geom_hline(aes()) +
+  geom_rect(aes(xmin = 57000,
+                xmax = 115000,
+                ymin = 50,
+                ymax = 71,
+                fill = c()),
+            color="red",
+            size = 0.5,
+            alpha = 0) +
+  xlab("gdpPercap") +
+  ylab("lifeExp") 
+
+gapminder %>%
+  filter(gdpPercap >= 57000) %>%
+  distinct(country) %>%
+  group_by(country) %>%
+  select(country)
 
 # P2) (3pts) Mediante un gráfico de puntos, visualice una comparativa entre
 #            la relación de ingresos y expectativa de vida, para los
-#            años 1052 y 2007. Para ello usted deberá replicar el siguiente
+#            años 1952 y 2007. Para ello usted deberá replicar el siguiente
 #            gráfico, donde el color representa a un continente distinto y
 #            el tamaño está dado por el total de población.
 #            Grafico 002
 #
 # R:
+Var1952_2007 <- gapminder %>%
+  filter(year == 1952 | year == 2007)
 
+Var1952_2007 %>%
+  ggplot(aes(x = gdpPercap,
+             y = lifeExp,
+             color=continent,
+             size = pop))  +
+  labs(colour="Continet") +
+  geom_point(fill="#9DB9E3",
+             alpha = 0.5) +
+  facet_wrap(~ year) +
+  xlab("gdpPercap") +
+  ylab("lifeExp") 
 
 
 # P3) (2pts) Determine el nivel de correlación de spearman, entre las variables
@@ -67,6 +111,46 @@ library("tidyverse")
 # R:
 
 
+
+Correlacionados <- data.frame(Agno  =  integer(),
+                              Corr  =  double()
+                             )
+
+AuxCorre <- data.frame(Agno  =  integer(),
+                       Corr  =  double()
+                      )
+
+Agnos <- gapminder %>%
+  distinct(year) %>%
+  select(year)
+
+LargoAgnos <- as.integer(length(Agnos$year))
+j <- 1
+AgnoRev <- 0
+AgnoCorr <- 0.0
+while (j <= LargoAgnos) {
+  AgnoRev <- as.integer(Agnos$year[j])
+  
+  AgnoGap <- gapminder %>%
+    filter(year == AgnoRev)
+  
+  
+  AgnoCorr <- cor(x = AgnoGap$gdpPercap, y = AgnoGap$lifeExp, method = "spearman")
+  AuxCorreAgno  <- data.frame(AgnoRev, AgnoCorr) 
+  
+  Correlacionados <- rbind(Correlacionados,AuxCorreAgno)
+
+  
+  j <- j + 1
+  AgnoRev <- 0
+  AgnoCorr <- 0.0
+  
+}
+
+Correlacionados %>%
+  arrange(desc(AgnoCorr)) %>%
+  head(1)
+#   1992 0.8972412
 
 # P4) Para el año obtenido en la pregunta anterior, realice una breve
 #     descrición de la distribución de la expectativa de vida lifeExp.
@@ -131,6 +215,10 @@ library("tidyverse")
 
 # ################################ Sección 2 ###################################
 #
+library("arules")
+library("tidyverse")
+
+
 # ###########
 # Cafetería
 # ##########
