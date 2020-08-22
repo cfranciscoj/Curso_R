@@ -51,23 +51,43 @@ head(gapminder)
 # ##############################################################################
 #
 # R:
-gapminder%>%
-        filter(gdpPercap>55000 & lifeExp > 50 )
 
-#R: Las observaciones corresponde al país Kuwait en los años
-#1952,1957, 1962, 1967, 1972, 1977
+
+gapminder %>%
+  ggplot(aes(x = gdpPercap,
+             y = lifeExp,
+             color=year,
+             size = pop))  +
+  labs(colour="year") +
+  geom_point(fill="#9DB9E3",
+             alpha = 0.5) +
+  #geom_hline(aes()) +
+  geom_rect(aes(xmin = 57000,
+                xmax = 115000,
+                ymin = 50,
+                ymax = 71,
+                fill = c()),
+            color="red",
+            size = 0.5,
+            alpha = 0) +
+  xlab("gdpPercap") +
+  ylab("lifeExp") 
+
+gapminder%>%
+        filter(gdpPercap>57000 & lifeExp > 50 & lifeExp <71)
+
+#R: Las observaciones corresponde al país Kuwait y los años corresponden a:
+#1952,1957, 1962, 1967, 1972, 1977.
 
 
 # P2) (3pts) Mediante un grÃ¡fico de puntos, visualice una comparativa entre
 #            la relaciÃ³n de ingresos y expectativa de vida, para los
-#            aÃ±os 1052 y 2007. Para ello usted deberÃ¡ replicar el siguiente
+#            aÃ±os 1952 y 2007. Para ello usted deberÃ¡ replicar el siguiente
 #            grÃ¡fico, donde el color representa a un continente distinto y
 #            el tamaÃ±o estÃ¡ dado por el total de poblaciÃ³n.
-#            Grafico 002
+#   
 #
 # R:
-
-#View(gapminder)
 
 gapminder %>%
         filter((year == 1952) | (year==2007))%>%
@@ -77,7 +97,6 @@ gapminder %>%
         facet_wrap(~year)
 
 
-#write.csv2(gapminder, "gapminderoriginal.csv", row.names = F)
 
 # P3) (2pts) Determine el nivel de correlaciÃ³n de spearman, entre las variables
 #            gdpPercap y lifeExp para cada uno de los aÃ±os registrados.
@@ -86,7 +105,6 @@ gapminder %>%
 #
 # R:
 library(stats)
-#library(corrplot)
 
 gapminder%>%
         group_by(year)%>%
@@ -110,10 +128,10 @@ vida<-gapminder%>%
         filter(year==1992)
 mean(vida$lifeExp)
 
-#Adicional, para visualizar como se distribuye la varible
-hist(x=vida$lifeExp,freq = T,main = "Histograma de edad",
-     xlab = "Edad",ylab = "Frecuencia",
-     col="gray")
+# #Adicional, para visualizar como se distribuye la variable
+# hist(x=vida$lifeExp,freq = T,main = "Histograma de edad año 1992",
+#      xlab = "Edad",ylab = "Frecuencia",
+#      col="gray")
 
 
 #R: La esperanza de vida es 64.16034
@@ -152,7 +170,8 @@ gapminder%>%
 gapminder%>%
         group_by(continent)%>%
         summarise(W=shapiro.test(log(lifeExp))$statistic,
-                 valor_p=shapiro.test(log(lifeExp))$p.value)
+                 valor_p=shapiro.test(log(lifeExp))$p.value)%>%
+        filter(valor_p>=0.05)
 
       
 #R: Los dos continentes que presentan una distribución normal son: África y 
@@ -200,7 +219,6 @@ aux_oceania%>%
         geom_density(col="blue")
 
 
-
 #Adicional
 aux_oceania%>%
         group_by(country)%>%
@@ -211,12 +229,13 @@ aux_africa%>%
         group_by(country)%>%
         summarise(n=n())
 
+
 #R: El historgrama de Oceanía visualmente no parece tener una distribución
 #normal, sin embargo esto puede ser a causa de los pocos países considerados
 #en la data.
 
 
-# c) (2pts) Complemente lo anterior, visualizando los qqplots para el logarimo
+# c) (2pts) Complemente lo anterior, visualizando los qqplots para el logaritmo
 #           de lifeExp. Considere la utilizaciÃ³n de las funciones
 #           qqnorm() y qqline() para el contraste contra una distribuciÃ³n normal.
 #
@@ -258,6 +277,7 @@ africa<- gapminder%>%
 #sea superior a 54 años es de 0.2634829.
 
 
+
 # ################################ SecciÃ³n 2 ###################################
 #
 # ###########
@@ -282,7 +302,7 @@ africa<- gapminder%>%
 ruta<-getwd()
 rutaC<-paste(ruta,"/datasets/cafeteria.csv", sep = "")
 trans_original <- read.csv(rutaC)
-View(trans_original)
+#View(trans_original)
 
 #Limpieza de items "NONE" en trans_original, debido a que no aportan información
 #relevante al análisis
@@ -290,7 +310,7 @@ View(trans_original)
 trans_original<-trans_original%>%
         filter(Item != "NONE")
 
-View(trans_original)
+#View(trans_original)
 
 # P1) (2pts) Genere tres nuevas columnas, que contengan la hora, minutos y
 #            segundos de la transacciÃ³n registrada. A modo de referencia,
@@ -410,7 +430,6 @@ mean(trx_horario_no_punta$total_trx) #promedio en horario no punta
 #lambda igual a la cantidad de transacciones procesadas en hora punta
 #entonces la pregunta: P(X>1300) = 1- P(X<=1300)
 
-#View(resumen)
 lambda_punta=mean(trx_horario_punta$total_trx)
 1-ppois(1300,lambda = lambda_punta)
 
@@ -428,12 +447,14 @@ lambda_punta=mean(trx_horario_punta$total_trx)
 # R:
 # La pregunta es interpretada como: P(X>1250)=1-P(X<=1250)
 
-#En horario punta se tiene:
-1-ppois(1250,lambda = lambda_punta)
 
 #En horario no punta se tiene:
 lambda_no_punta=mean(trx_horario_no_punta$total_trx)
 1-ppois(1250,lambda = lambda_no_punta)
+
+#En horario punta se tiene:
+1-ppois(1250,lambda = lambda_punta)
+
 
 #R: La probabilidad de que el número de transacciones por hora sea superior
 #a 1250 transacciones por hora es de un 16,476% en horario punta, en tanto que
@@ -458,9 +479,9 @@ ppois(1274,lambda = lambda_punta)
 #En horario no punta se tiene:
 ppois(203,lambda = lambda_no_punta)
 
-#Mediante prueba y error, se garantiza que se gestiorarían como máximo
+#R: Mediante prueba y error, se garantiza que se gestiorarían 
 #1274 transacciones por hora en horario punta y 203 transacciones por hora
-#en horario no punta.
+#en horario no punta, .
 
 
 # ####################################
@@ -543,7 +564,9 @@ tramoII
 tramoIII
 
 # Sí, cambian los ítems, específicamente desde la tercera posición, 
-#para el tramo I, en el tramo II y III sólo cambia la quinta posición,
+#para el tramo I, ingresando a la tercera posición "Pastry", cuarta
+#posición "Tea" y quinta posición "Medialuna".
+#Para el tramo II y III sólo cambia la quinta posición,
 #ingresa "Sandwich" y "Hot chocolate" en vez de "Pastry", respectivamente.
 #Cabe indicar que para todos los tramos las dos primeras posiciones se 
 #mantienen con "Coffee" y "Bread".
@@ -595,7 +618,7 @@ regla_1 <- apriori(
         control = list (verbose = F)
         )
 top_1_rango_1_supp<-sort(regla_1,by="support",decreasing = T)[1:2]
-inspect(regla_1)
+#inspect(regla_1)
 
 
 # Registros en el tramo: 12:00-16:59
@@ -604,13 +627,13 @@ regla_2 <- apriori(
         parameter = list(
                 supp = 0.02,
                 conf = 0.1,
-                minlen=2 #se excluyen aquellos que no tienen antecedente o consecuente
+                minlen = 2 #se excluyen aquellos que no tienen antecedente o consecuente
                 ),
         control = list (verbose = F)
         )
 top_1_rango_2_supp<-sort(regla_2,by="support",decreasing = T)[1:2]
 
-#inspect(regla_2)
+#inspect(top_1_rango_2_supp)
 
 # Registros en el tramo: 17:00-23:59
 regla_3 <- apriori(
@@ -623,10 +646,11 @@ regla_3 <- apriori(
         control = list (verbose = F)
         )
 top_1_rango_3_supp<-sort(regla_3,by="support",decreasing = T)[1:2]
-inspect(regla_3)
+#inspect(regla_3)
 
 # Registros en el tramo: 7:00-11:59
 inspect(top_1_rango_1_supp)
+#summary(regla_1)
 #La regla más frecuente en este tramo es: {Bread}->{Coffee} y {Coffee}->{Bread}
 #ambas con el mismo support
 
@@ -660,7 +684,7 @@ inspect(top_1_rango_2_conf)
 top_1_rango_3_conf<-sort(regla_3,by="confidence",decreasing = T)[1]
 inspect(top_1_rango_3_conf)
 #La regla con mayor confidence es: {Postcard}->{Tshirt}
-#con un confidence de 0.60
+#con un confidence de 0.6
 
 
 # c) (2pts) Â¿CuÃ¡l es la regla de asociaciÃ³n con mayor lift en cada uno de los
@@ -737,13 +761,13 @@ regla_3_coffee <- apriori(
         control = list (verbose = F)
         )
 # Registros en el tramo: 7:00-11:59
-view(inspect(regla_1_coffee))
+inspect(regla_1_coffee)
 
 # Registros en el tramo: 12:00-16:59
-view(inspect(regla_2_coffee))
+inspect(regla_2_coffee)
 
 # Registros en el tramo: 12:00-16:59
-view(inspect(regla_3_coffee))
+inspect(regla_3_coffee)
 
 
 
@@ -753,10 +777,10 @@ view(inspect(regla_3_coffee))
 #
 # R:
 
-# Registros en el tramo: 7:00-11:59
+#Registros en el tramo: 7:00-11:59
 #Considerando un support mínimo de 0.02 y un confidence mínimo de 0.1, donde con 
 #el primer parámetro controlamos la frecuencia relativa de la asociación, en tanto
-#que con el parámetro confidence controlamos que la probabilidad de que ocurra
+#que con el parámetro confidence controlamos la probabilidad de que ocurra
 #el consecuente dado que ocurrió el antecedente, entonces se tiene:
 
 regla_1_coffee <- apriori(
@@ -797,7 +821,7 @@ inspect(regla_1_coffee_rev)
 # Registros en el tramo: 12:00-16:59
 #Considerando un support mínimo de 0.02 y un confidence mínimo de 0.1, donde con 
 #el primer parámetro controlamos la frecuencia relativa de la asociación, en tanto
-#que con el parámetro confidence controlamos que la probabilidad de que ocurra
+#que con el parámetro confidence controlamos la probabilidad de que ocurra
 # el consecuente dado que ocurrió el antecedente, entonces se tiene:
 regla_2_coffee <- apriori(
         data = trans_2,
@@ -828,7 +852,7 @@ regla_2_coffee_rev <- apriori(
 inspect(regla_2_coffee_rev)
 
 #En este horario recomendaría una promoción de Coffee y Sandwich, debido a que
-#el lift alcanzado por esta regla es de un 1.1818 esto significa que la probabilidad
+#el lift alcanzado por esta regla es de un 1.168 esto significa que la probabilidad
 #de comprar sandwich se ve aumentada dado que ya compraron café, específicamente
 #la probabilidad de comprar sandwich aumenta desde un 0.1159363 a un 0.1354701.
 
@@ -836,7 +860,7 @@ inspect(regla_2_coffee_rev)
 # Registros en el tramo: 17:00-23:59
 #Considerando un support mínimo de 0.02 y un confidence mínimo de 0.1, donde con 
 #el primer parámetro controlamos la frecuencia relativa de la asociación, en tanto
-#que con el parámetro confidence controlamos que la probabilidad de que ocurra
+#que con el parámetro confidence controlamos la probabilidad de que ocurra
 # el consecuente dado que ocurrió el antecedente, entonces se tiene:
 regla_3_coffee <- apriori(
         data = trans_3,
