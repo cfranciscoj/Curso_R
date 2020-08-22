@@ -1,7 +1,7 @@
-### Control 3: EvaluaciÃ³n Final ###
+### Control 3: Evaluación Final ###
 #
-# Nombre Integrantes : Macarena MuÃ±oz Olave
-#                      Carlos Aravena De Los RÃ?os
+# Nombre Integrantes : Macarena Muñoz Olave
+#                      Carlos Aravena De Los R�?os
 # Curso              : Introduccion a R 2020-2
 # Sigla              : DBDN-R-C3
 
@@ -12,54 +12,57 @@ library("ggplot2")
 library("arules")
 library("tidyverse")
 
-# ################################ SecciÃ³n 1 ###################################
+# ################################ Sección 1 ###################################
 #
 # ##############
-# IntroducciÃ³n
+# Introducción
 # #############
 #
-# En esta seciÃ³n usted generarÃ¡ un breve anÃ¡isis descriptivo de la evoluciÃ³n de
-# la expectativa de vida de diferentes paÃ?ses. Para ello usted utilizarÃ¡ la
-# informaciÃ³n disponible en el dataset gapminder del package del mismo nombre.
-# La informaciÃ³n contenida en este dataset corresponde a la siguiente:
+# En esta seción usted generará un breve anáisis descriptivo de la evolución de
+# la expectativa de vida de diferentes pa�?ses. Para ello usted utilizará la
+# información disponible en el dataset gapminder del package del mismo nombre.
+# La información contenida en este dataset corresponde a la siguiente:
 #
 #     - country: Factor con 142 niveles
 #     - continent: Factor con 5 niveles
-#     - year: Rangos de aÃ±os desde 1952 to 2007 en incrementos de 5 aÃ±os
-#     - lifeExp: Esperanza de vida al nacer, en aÃ±os
-#     - pop: PoblaciÃ³n
-#     - gdpPercap: GDP per capita (US$, ajustado por inflaciÃ³n)
+#     - year: Rangos de años desde 1952 to 2007 en incrementos de 5 años
+#     - lifeExp: Esperanza de vida al nacer, en años
+#     - pop: Población
+#     - gdpPercap: GDP per capita (US$, ajustado por inflación)
 #
 
 #Carga de data
 data(gapminder)
 head(gapminder)
 
-# P1) (2pts) El siguiente representa la relaciÃ³n entre el el ingreso GDP y
-#            la esperanza de vida para todos los paÃ?ses a lo largo de todos
-#            los aÃ±os, adicionalmente el tamaÃ±o de cada punto estÃ¡ en proporciÃ³n
-#            con la poblciÃ³n total de cada paÃ?s. Adicionalmente, el color varÃ?a
-#            en funciÃ³n del aÃ±o del registro. En el grÃ¡fico se pueden apreciar
+# P1) (2pts) El siguiente representa la relación entre el el ingreso GDP y
+#            la esperanza de vida para todos los pa�?ses a lo largo de todos
+#            los años, adicionalmente el tamaño de cada punto está en proporción
+#            con la poblción total de cada pa�?s. Adicionalmente, el color var�?a
+#            en función del año del registro. En el gráfico se pueden apreciar
 #            observaciones con alto GDP (aquellas encerradas en el recuadro rojo).
-#            IdentifÃ?que dichas observaciones e indique claramente a quÃ©
-#            paÃ?s(es) y aÃ±o(s) corresponden.
+#            Identif�?que dichas observaciones e indique claramente a qué
+#            pa�?s(es) y año(s) corresponden.
 #
 # ##############################################################################
-# NOTA: Usted tiene libertad de escoger el mÃ©todo con el cual identificar
+# NOTA: Usted tiene libertad de escoger el método con el cual identificar
 #       dichas observaciones.
-#       GrÃ¡fico 001
+#       Gráfico 001
 # ##############################################################################
 #
 # R:
 gapminder%>%
         filter(gdpPercap>55000 & lifeExp > 50 )
 
+#R: Las observaciones corresponde al pa�s Kuwait en los a�os
+#1952,1957, 1962, 1967, 1972, 1977
 
-# P2) (3pts) Mediante un grÃ¡fico de puntos, visualice una comparativa entre
-#            la relaciÃ³n de ingresos y expectativa de vida, para los
-#            aÃ±os 1052 y 2007. Para ello usted deberÃ¡ replicar el siguiente
-#            grÃ¡fico, donde el color representa a un continente distinto y
-#            el tamaÃ±o estÃ¡ dado por el total de poblaciÃ³n.
+
+# P2) (3pts) Mediante un gráfico de puntos, visualice una comparativa entre
+#            la relación de ingresos y expectativa de vida, para los
+#            años 1052 y 2007. Para ello usted deberá replicar el siguiente
+#            gráfico, donde el color representa a un continente distinto y
+#            el tamaño está dado por el total de población.
 #            Grafico 002
 #
 # R:
@@ -76,9 +79,9 @@ gapminder %>%
 
 #write.csv2(gapminder, "gapminderoriginal.csv", row.names = F)
 
-# P3) (2pts) Determine el nivel de correlaciÃ³n de spearman, entre las variables
-#            gdpPercap y lifeExp para cada uno de los aÃ±os registrados.
-#            Â¿En quÃ© aÃ±o se observa el mayor nivel de correlaciÃ³n entre
+# P3) (2pts) Determine el nivel de correlación de spearman, entre las variables
+#            gdpPercap y lifeExp para cada uno de los años registrados.
+#            ¿En qué año se observa el mayor nivel de correlación entre
 #            ambas variables?
 #
 # R:
@@ -91,32 +94,32 @@ gapminder%>%
         arrange(-correlacion)%>%
         head(1)
        
-#R: El año 1992 se observa el mayor nivel de correlación entre ambas
+#R: El a�o 1992 se observa el mayor nivel de correlaci�n entre ambas
 #variables, alcanzado un valor de 0.897
 
 
-# P4) Para el aÃ±o obtenido en la pregunta anterior, realice una breve
-#     descriciÃ³n de la distribuciÃ³n de la expectativa de vida lifeExp.
+# P4) Para el año obtenido en la pregunta anterior, realice una breve
+#     descrición de la distribución de la expectativa de vida lifeExp.
 #     E indique lo siguiente:
-# a) (1pt) Â¿CuÃ¡l fue la esperanza de vida promedio considerando todos
-#          los paÃ?ses registrados?
+# a) (1pt) ¿Cuál fue la esperanza de vida promedio considerando todos
+#          los pa�?ses registrados?
 #
 # R:
 
 vida<-gapminder%>%
         filter(year==1992)
+mean(vida$lifeExp)
 
+#Adicional, para visualizar como se distribuye la varible
 hist(x=vida$lifeExp,freq = T,main = "Histograma de edad",
      xlab = "Edad",ylab = "Frecuencia",
      col="gray")
 
 
-mean(vida$lifeExp)
-
-#R: La esperanza de vida es 64.16
+#R: La esperanza de vida es 64.16034
 
 
-# b) (1pt) Â¿CuÃ¡l es el paÃ?s que en dicho aÃ±o tuvo la mayor esperanza de vida?
+# b) (1pt) ¿Cuál es el pa�?s que en dicho año tuvo la mayor esperanza de vida?
 #
 # R:
 gapminder%>%
@@ -127,19 +130,21 @@ gapminder%>%
         head(1)
 
 
-#R: El país con la mayor esperanza de vida fue Japón
+#R: El pa�s con la mayor esperanza de vida fue Jap�n, alcanzando un valor de 79.4
+
+
 
 # ###########################
 # En busca de la normalidad
 # ##########################
 #
 # Se sabe que una manera de estabilizar la variabilidad presente en una variable,
-# es estudiando su logaritmo. A continuaciÃ³n usted deberÃ¡ estudiar el
+# es estudiando su logaritmo. A continuación usted deberá estudiar el
 # comportamiento ddistribucional del loagritmo de la expectativa de vida.
 #
-# P5) Considerando todos los aÃ±os de observaciÃ³n, determine lo sguiente:
+# P5) Considerando todos los años de observación, determine lo sguiente:
 # a) (2pts) Mediante el test de shapiro, indique los dos continentes que
-#           presentan un comportamiento normal en la distribuciÃ³n del
+#           presentan un comportamiento normal en la distribución del
 #           logaritmo de lifeExp.
 #
 # R:
@@ -150,22 +155,21 @@ gapminder%>%
                  valor_p=shapiro.test(log(lifeExp))$p.value)
 
       
-#R: Los dos continentes que presentan una distribución normal son: África y 
-#Oceanía, donde el valor p del test de shapiro-Wilk es mayor a 0.05, por lo
-#tanto no existe evidencia estadísticamente significativa para rechazar la
-#hipótesis nula, esto es que la variable en estudio tenga un comportamiento
+#R: Los dos continentes que presentan una distribuci�n normal son: �frica y 
+#Ocean�a, donde el valor p del test de shapiro-Wilk es mayor a 0.05, por lo
+#tanto no existe evidencia estad�sticamente significativa para rechazar la
+#hip�tesis nula, esto es que la variable en estudio tenga una distribuci�n
 #normal.
 
 
 # b) (3pts) Para los continentes encontrados en a), grafique los histogramas
-#           para el logaritmo de lifeExp. Considere aÃ±adir estimaciones de las
-#           densidades, dadas por geom_density asÃ? como una densidad normal con
-#           parÃ¡metros de media y vrianza igual a la media y desviaciÃ³n estandar
-#           muestral. Â¿QuÃ© opina sobre el histograma de OceanÃ?a?
+#           para el logaritmo de lifeExp. Considere añadir estimaciones de las
+#           densidades, dadas por geom_density as�? como una densidad normal con
+#           parámetros de media y vrianza igual a la media y desviación estandar
+#           muestral. ¿Qué opina sobre el histograma de Ocean�?a?
 #           Comente sobre posibles causas de su aspecto.
 #
 # R:
-
 
 aux_africa<-gapminder%>%
         filter(continent=="Africa")
@@ -181,11 +185,10 @@ aux_africa%>%
         geom_density(col="blue")
 
 
+
 aux_oceania<-gapminder%>%
         filter(continent=="Oceania")
 
-
-        
 aux_oceania%>%
         ggplot()+
         aes(x=log(lifeExp))+
@@ -203,43 +206,45 @@ aux_oceania%>%
         group_by(country)%>%
         summarise(n=n())
 
+
 aux_africa%>%
         group_by(country)%>%
         summarise(n=n())
 
-#R: El historgrama de Oceanía visualmente no parece tener una distribución
-#normal, sin embargo esto puede ser a causa de los pocos países considerados
+#R: El historgrama de Ocean�a visualmente no parece tener una distribuci�n
+#normal, sin embargo esto puede ser a causa de los pocos pa�ses considerados
 #en la data.
 
+
 # c) (2pts) Complemente lo anterior, visualizando los qqplots para el logarimo
-#           de lifeExp. Considere la utilizaciÃ³n de las funciones
-#           qqnorm() y qqline() para el contraste contra una distribuciÃ³n normal.
+#           de lifeExp. Considere la utilización de las funciones
+#           qqnorm() y qqline() para el contraste contra una distribución normal.
 #
 # R:
 
-#África
+#�frica
 qqnorm(log(aux_africa$lifeExp))
 qqline(log(aux_africa$lifeExp))
 
-#Oceanía
+#Ocean�a
 qqnorm(log(aux_oceania$lifeExp))
 qqline(log(aux_oceania$lifeExp))
 
-#R: En el gráfico de qqnorm y qqline de África se observa una gran cantidad de
-#datos y visualmente se podría decir que el logaritmo de lifeExp tiene una
-#una distribución normal. 
-#En el gráfico qqnorm y qqline de Oceanía se observan pocos datos y además
-#algunos posibles puntos atípicos, no es posible afirmar visualmente que
+#R: En el gr�fico de qqnorm y qqline de �frica se observa una gran cantidad de
+#datos y visualmente se podr�a decir que el logaritmo de lifeExp tiene una
+#una distribuci�n normal. 
+#En el gr�fico qqnorm y qqline de Ocean�a se observan pocos datos y adem�s
+#algunos posibles puntos at�picos, no es posible afirmar visualmente que
 # el logaritmo de la variable lifeExp se distribuya normal, sin embargo
 #al realizar el test de shapiro, el valor p no es menor a 0.05, por lo que
-#no existe evidencia estadísticamente significativa para rechazar la hipótesis
-#nula, entonces podemos asumir que esta variable tiene una disribución normal.
+#no existe evidencia estad�sticamente significativa para rechazar la hip�tesis
+#nula, entonces podemos asumir que esta variable tiene una disribuci�n normal.
 
 
-# P6) (3pts) Considerando el continente de Ãfrica, y asumiendo normalidad en el
-#            logaritmo de lifeExp. Independiente del aÃ±o,
-#            Â¿cuÃ¡l es la probabilidad de que la expectativa de vida (lifeExp)
-#            sea superior a 54 aÃ±os?
+# P6) (3pts) Considerando el continente de África, y asumiendo normalidad en el
+#            logaritmo de lifeExp. Independiente del año,
+#            ¿cuál es la probabilidad de que la expectativa de vida (lifeExp)
+#            sea superior a 54 años?
 #
 # R:
 
@@ -249,24 +254,26 @@ africa<- gapminder%>%
 1-pnorm(log(54),mean=mean(log(africa$lifeExp)),sd=sd(log(africa$lifeExp)))
 
 
+#R: La probabilidad de que la expectativa de vida (lifeExp)
+#sea superior a 54 a�os es de 0.2634829.
 
 
-# ################################ SecciÃ³n 2 ###################################
+# ################################ Sección 2 ###################################
 #
 # ###########
-# CafeterÃ?a
+# Cafeter�?a
 # ##########
 #
 # A usted se le solicita analizar las ventas de los distintos productos
-# ofrecidos por una cafeterÃ?a. Para ello usted deberÃ¡ generar una descripciÃ³n
-# de dichas ventas,utilizando estadÃ?sticos descriptivos, grÃ¡ficos y ademÃ¡s
-# deberÃ¡ incluir un anÃ¡lisis de la venta cruzada de los productos en cuestiÃ³n.
+# ofrecidos por una cafeter�?a. Para ello usted deberá generar una descripción
+# de dichas ventas,utilizando estad�?sticos descriptivos, gráficos y además
+# deberá incluir un análisis de la venta cruzada de los productos en cuestión.
 #
 #
 #
-# El siguiente archivo contiene los registros de las ventas de una cafeterÃ?a en
-# un determinado perÃ?odo. Ustede deberÃ¡ responder las siguientes preguntas con
-# el objetivo de generar recomendaciones de ventas en distintos perÃ?odos de tiempo.
+# El siguiente archivo contiene los registros de las ventas de una cafeter�?a en
+# un determinado per�?odo. Ustede deberá responder las siguientes preguntas con
+# el objetivo de generar recomendaciones de ventas en distintos per�?odos de tiempo.
 #
 # trans_original <- read.csv("cafeteria.csv")
 #
@@ -277,16 +284,17 @@ rutaC<-paste(ruta,"/datasets/cafeteria.csv", sep = "")
 trans_original <- read.csv(rutaC)
 View(trans_original)
 
-#Limpieza de items "NONE" en trans_original, debido a que no aportan información
-#relevante al análisis
+#Limpieza de items "NONE" en trans_original, debido a que no aportan informaci�n
+#relevante al an�lisis
+
 trans_original<-trans_original%>%
         filter(Item != "NONE")
 
 View(trans_original)
 
 # P1) (2pts) Genere tres nuevas columnas, que contengan la hora, minutos y
-#            segundos de la transacciÃ³n registrada. A modo de referencia,
-#            su tabla deberÃ?a contener al menos los siguientes campos.
+#            segundos de la transacción registrada. A modo de referencia,
+#            su tabla deber�?a contener al menos los siguientes campos.
 #
 #
 #     Date          hora  min   seg   Transaction   Item
@@ -298,7 +306,7 @@ View(trans_original)
 #     2016-10-30      10   07    57             3   Jam
 #     2016-10-30      10   07    57             3   Cookies
 #
-# De ser de utilidad, puede consultar la documentaciÃ³n de las funciones
+# De ser de utilidad, puede consultar la documentación de las funciones
 # substr y separate de los packages base y tidyr respectivamente.
 #
 #
@@ -309,14 +317,14 @@ trans_original<-trans_original%>%
 
 head(trans_original)
 
-# P2) (4pts) Genere una tabla resumen que contenga la siguiente informaciÃ³n.
+# P2) (4pts) Genere una tabla resumen que contenga la siguiente información.
 #
 #     hora: Hora donde se registraron las transacciones. por ejemplo, el valor
 #           09 indica el bloque horario comprendido entre las 09:00 y 09:59 hrs.
 #     total_trx : total de transacciones distintas generadas en el bloque horario
 #                 respectivo.
 #     total_items: total de items vendidos en el bloque horario respectivo.
-#     total_items_unicos: total de items Ãºnicos venidos en el bloque horario
+#     total_items_unicos: total de items únicos venidos en el bloque horario
 #                         respectivo.
 #
 # R:
@@ -353,7 +361,7 @@ head(resumen)
 #     punta si la cantidad de transacciones distintas generadas en dicho
 #     bloque supera las 1000 transacciones.
 #
-# a) (1pt) Â¿QuÃ© horas comprende el horario punta?
+# a) (1pt) ¿Qué horas comprende el horario punta?
 #
 # R:
 
@@ -365,8 +373,8 @@ resumen%>%
 #R: El horio punta comprende entre 9 y 14 horas.
 
 
-# b) (2pt) En promedio, Â¿cuÃ¡ntas transacciones distintas por hora se dieron
-#          en horario punta?Â¿y en horario no punta?
+# b) (2pt) En promedio, ¿cuántas transacciones distintas por hora se dieron
+#          en horario punta?¿y en horario no punta?
 #
 # R:
 
@@ -381,19 +389,20 @@ trx_horario_no_punta<-resumen%>%
 mean(trx_horario_punta$total_trx) #promedio en horario punta
 mean(trx_horario_no_punta$total_trx) #promedio en horario no punta
 
+
 #R: El promedio de transacciones en horario punta es 1216.5 transacciones, 
 #en tanto que el horario no punta alcanza un promedio de 180.5 transacciones.
 
 
 # P4) Se sabe que el total de personal disponible es capaz de atender como
-#     mÃ¡ximo, 1300 transacciones por hora, de modo que no se "sature"
+#     máximo, 1300 transacciones por hora, de modo que no se "sature"
 #     el sistema y que los tiempos de espera de los clientes sean razonables.
 #     Asumiendo que la cantidad de transacciones por hora tiene una
-#     distribuciÃ³n Poisson con parÃ¡metro $\lambda$ igual al estimado
+#     distribución Poisson con parámetro $\lambda$ igual al estimado
 #     en la pregunta 3.b responda lo siguiente:
 #
-# a) (2pt) Â¿CuÃ¡l es la probabilidad de que en horario punta se den mÃ¡s de
-#           1300 transacciones en una hora? Â¿CÃ³mo interpretarÃ?a este valor?
+# a) (2pt) ¿Cuál es la probabilidad de que en horario punta se den más de
+#           1300 transacciones en una hora? ¿Cómo interpretar�?a este valor?
 #           Comente.
 #
 # R:
@@ -406,15 +415,15 @@ lambda_punta=mean(trx_horario_punta$total_trx)
 1-ppois(1300,lambda = lambda_punta)
 
 
-#R: La probabilidad de que el número de transacciones por hora sea mayor
+#R: La probabilidad de que el n�mero de transacciones por hora sea mayor
 # a 1300 y que por tanto el sistema se sature y que los tiempos de espera
 # de los clientes ya no sean razonabes es de un 0.008512964
 
 
 # b) (1pt) Con el objetivo de reducir costos, se propone limitar el personal
-#          disponible a modo de poder atender como mÃ¡ximo 1250 transacciones
-#          por hora. Â¿Que tan probable es que se supere este mÃ¡ximo de
-#          transacciones por hora ? Â¿RecomendarÃ?a usted esta medida?
+#          disponible a modo de poder atender como máximo 1250 transacciones
+#          por hora. ¿Que tan probable es que se supere este máximo de
+#          transacciones por hora ? ¿Recomendar�?a usted esta medida?
 #
 # R:
 # La pregunta es interpretada como: P(X>1250)=1-P(X<=1250)
@@ -426,19 +435,19 @@ lambda_punta=mean(trx_horario_punta$total_trx)
 lambda_no_punta=mean(trx_horario_no_punta$total_trx)
 1-ppois(1250,lambda = lambda_no_punta)
 
-#R: La probabilidad de que el número de transacciones por hora sea superior
+#R: La probabilidad de que el n�mero de transacciones por hora sea superior
 #a 1250 transacciones por hora es de un 16,476% en horario punta, en tanto que
 #en el horario no punta la probabilidad es 0%
-#Con la información disponible, no recomendaría la medida, 
+#Con la informaci�n disponible, no recomendar�a la medida, 
 #ya que existe una probabilidad de un 16,476%
-#de que el número de transacciones por hora sea superior y no tendríamos la 
-#capacidad de procesar estas transacciones, lo que impactaría en 
+#de que el n�mero de transacciones por hora sea superior y no tendr�amos la 
+#capacidad de procesar estas transacciones, lo que impactar�a en 
 #la calidad del servicio prestado a nuestros clientes.
 
 
 # c) (2pt) Usted sugiere modificar la cantidad de personal pero teniendo en
-#          cuenta de que se garantice la atenciÃ³n de al menos un 95% de las
-#          transacciones por hora. Â¿CuÃ¡ntas transacciones por hora se deberÃ?an
+#          cuenta de que se garantice la atención de al menos un 95% de las
+#          transacciones por hora. ¿Cuántas transacciones por hora se deber�?an
 #          poder gestionar en este escenario?
 #
 # R:
@@ -449,21 +458,21 @@ ppois(1274,lambda = lambda_punta)
 #En horario no punta se tiene:
 ppois(203,lambda = lambda_no_punta)
 
-#Mediante prueba y error, se garantiza que se gestiorarían como máximo
-#1274 transacciones por hora en horario punta y 564 transacciones por hora
+#Mediante prueba y error, se garantiza que se gestiorar�an como m�ximo
+#1274 transacciones por hora en horario punta y 203 transacciones por hora
 #en horario no punta.
 
 
 # ####################################
-# AnÃ¡lisis de los productos vendidos.
+# Análisis de los productos vendidos.
 # ####################################
 #
 # Con el objetivo de aumentar las ventas, se le solicita a usted analizar
 # los itmes y las ventas cruzadas entre los productos ofrecidos. Para ello
-# usted guÃ?a su anÃ¡lisis en funciÃ³n de las siguientes preguntas.
+# usted gu�?a su análisis en función de las siguientes preguntas.
 #
-# P5) (2pt) Â¿CuÃ¡les son los 5 items mÃ¡s vendidos? Ilustre mediante un
-#            grÃ¡fico de barras o una tabla.
+# P5) (2pt) ¿Cuáles son los 5 items más vendidos? Ilustre mediante un
+#            gráfico de barras o una tabla.
 #
 # R:
 
@@ -481,14 +490,14 @@ trans_original %>%
                 x="Item",
                 y="Cantidad",
                 fill="Cantidad",
-                title="Top 5 items más vendidos",
-                subtitle = "Considera todo el horario de operación"
+                title="Top 5 items m�s vendidos",
+                subtitle = "Considera todo el horario de operaci�n"
         )
 
 
 
-# P6) (4pts) Â¿Cambian estos 5 Ã?tems segÃºn el horario de atenciÃ³n? Para ello
-#             muestre los 5 items mÃ¡s vendidos en los siguientes horarios.
+# P6) (4pts) ¿Cambian estos 5 �?tems según el horario de atención? Para ello
+#             muestre los 5 items más vendidos en los siguientes horarios.
 #
 #             - 7:00-11:59
 #             - 12:00-16:59
@@ -526,15 +535,15 @@ tramoIII<-trans_original%>%
         head(5)
 
 #R: 
-#Entre 7:00 y 11:59 los 5 items más vendidos son:
+#Entre 7:00 y 11:59 los 5 items m�s vendidos son:
 tramoI
-#Entre 12:00 y 16:59 los 5 items más vendidos son:
+#Entre 12:00 y 16:59 los 5 items m�s vendidos son:
 tramoII
-#Entre 17:00 y 23:59 los 5 items más vendidos son:
+#Entre 17:00 y 23:59 los 5 items m�s vendidos son:
 tramoIII
 
-# Sí, cambian los ítems, específicamente desde la tercera posición, 
-#para el tramo I, en el tramo II y III sólo cambia la quinta posición,
+# S�, cambian los �tems, espec�ficamente desde la tercera posici�n, 
+#para el tramo I, en el tramo II y III s�lo cambia la quinta posici�n,
 #ingresa "Sandwich" y "Hot chocolate" en vez de "Pastry", respectivamente.
 #Cabe indicar que para todos los tramos las dos primeras posiciones se 
 #mantienen con "Coffee" y "Bread".
@@ -542,10 +551,10 @@ tramoIII
 
 
 # #######################
-# GenereaciÃ³n de reglas
+# Genereación de reglas
 # ######################
 #
-#Para realizar un análisis de las reglas de asociación, se procede
+#Para realizar un an�lisis de las reglas de asociaci�n, se procede
 #a transformar el "dataframe" trans_original a uno de tipo "transactional",
 #como sigue:
 # Registros en el tramo: 7:00-11:59
@@ -566,15 +575,15 @@ rango_3<-trans_original%>%
 trans_3<-as(split(rango_3[,"Item"],rango_3[,"Transaction"]),"transactions")
 
 
-# P7) Considerando un support mÃ?nimo de 0.02 , un confidence mÃ?nimo de 0.1 y
-#     teniendo en cuenta que no se deben considerar reglas de asociaciÃ³n cuyo
-#     antecedente o consecuente sean vacÃ?os,
+# P7) Considerando un support m�?nimo de 0.02 , un confidence m�?nimo de 0.1 y
+#     teniendo en cuenta que no se deben considerar reglas de asociación cuyo
+#     antecedente o consecuente sean vac�?os,
 #
-# a) (2pts) Â¿CuÃ¡l es la regla de asociaciÃ³n mÃ¡s frecuente en cada uno de
+# a) (2pts) ¿Cuál es la regla de asociación más frecuente en cada uno de
 #            los horarios indicados en P6)?
 #
 # R:
-#Generación de reglas según tramo.
+#Generaci�n de reglas seg�n tramo.
 # Registros en el tramo: 7:00-11:59
 regla_1 <- apriori(
         data = trans_1,
@@ -586,7 +595,7 @@ regla_1 <- apriori(
         control = list (verbose = F)
         )
 top_1_rango_1_supp<-sort(regla_1,by="support",decreasing = T)[1:2]
-#inspect(regla_1)
+inspect(regla_1)
 
 
 # Registros en el tramo: 12:00-16:59
@@ -618,20 +627,20 @@ inspect(regla_3)
 
 # Registros en el tramo: 7:00-11:59
 inspect(top_1_rango_1_supp)
-#La regla más frecuente en este tramo es: {Bread}->{Coffee} y {Coffee}->{Bread}
+#La regla m�s frecuente en este tramo es: {Bread}->{Coffee} y {Coffee}->{Bread}
 #ambas con el mismo support
 
 # Registros en el tramo: 12:00-16:59
 inspect(top_1_rango_2_supp)
-#La regla más frecuente en este tramo es: {Bread}->{Coffee} y {Coffee}->{Bread}
+#La regla m�s frecuente en este tramo es: {Bread}->{Coffee} y {Coffee}->{Bread}
 #ambas con el mismo support
 
 # Registros en el tramo: 17:00-23:59
 inspect(top_1_rango_3_supp)
-#La regla más frecuente en este tramo es: {Cake}->{Coffee} y {Coffee}->{Cake}
+#La regla m�s frecuente en este tramo es: {Cake}->{Coffee} y {Coffee}->{Cake}
 #ambas con el mismo support
 
-# b) (2pts) Â¿CuÃ¡l es la regla de asociaciÃ³n con mayor confidence en cada uno
+# b) (2pts) ¿Cuál es la regla de asociación con mayor confidence en cada uno
 #            de los horarios indicados en P6)?
 #
 # R:
@@ -654,13 +663,13 @@ inspect(top_1_rango_3_conf)
 #con un confidence de 0.60
 
 
-# c) (2pts) Â¿CuÃ¡l es la regla de asociaciÃ³n con mayor lift en cada uno de los
+# c) (2pts) ¿Cuál es la regla de asociación con mayor lift en cada uno de los
 #            horarios indicados en P6)?
 #
 #
 # ##############################################################################
-# NOTA: En caso de no obtener reglas con los parÃ¡metros indicados, modifÃ?quelos,
-#       pero tenga en consideraciÃ³n este hecho al momento de argumentar
+# NOTA: En caso de no obtener reglas con los parámetros indicados, modif�?quelos,
+#       pero tenga en consideración este hecho al momento de argumentar
 #       las preguntas posteriores.
 # ##############################################################################
 #
@@ -685,7 +694,7 @@ inspect(top_1_rango_3_lift)
 #ambas con un lift de: 7.800
 
 
-# P8) Se quiere potenciar un segundo producto por la compra de un cafÃ© en los
+# P8) Se quiere potenciar un segundo producto por la compra de un café en los
 #     tres horarios definidos previamente en P6.
 #
 # a) (3pts) Genere tres listados (uno por cada rango horario) con todas las
@@ -738,17 +747,17 @@ view(inspect(regla_3_coffee))
 
 
 
-# b) (2pts) Â¿QuÃ© promociÃ³n recomendarÃ?a en cada horario por la compra de un
-#           cafÃ©? Justifique su respuesta basÃ¡ndose en los
+# b) (2pts) ¿Qué promoción recomendar�?a en cada horario por la compra de un
+#           café? Justifique su respuesta basándose en los
 #           indicadores support, confidence y lift.
 #
 # R:
 
 # Registros en el tramo: 7:00-11:59
-#Considerando un support mínimo de 0.02 y un confidence mínimo de 0.1, donde con 
-#el primer parámetro controlamos la frecuencia relativa de la asociación, en tanto
-#que con el parámetro confidence controlamos que la probabilidad de que ocurra
-#el consecuente dado que ocurrió el antecedente, entonces se tiene:
+#Considerando un support m�nimo de 0.02 y un confidence m�nimo de 0.1, donde con 
+#el primer par�metro controlamos la frecuencia relativa de la asociaci�n, en tanto
+#que con el par�metro confidence controlamos que la probabilidad de que ocurra
+#el consecuente dado que ocurri� el antecedente, entonces se tiene:
 
 regla_1_coffee <- apriori(
         data = trans_1,
@@ -764,7 +773,7 @@ regla_1_coffee <- apriori(
 #Luego ordenamos por lift
 inspect(sort(regla_1_coffee,by="lift",decreasing = T))
 
-#Revisión de support de item medialuna
+#Revisi�n de support de item medialuna
 regla_1_coffee_rev <- apriori(
         data = trans_1,
         parameter = list(
@@ -779,17 +788,17 @@ regla_1_coffee_rev <- apriori(
 inspect(regla_1_coffee_rev)
 
 
-#En este horario recomendaría una promoción de Coffee y Medialuna, debido a que
+#En este horario recomendar�a una promoci�n de Coffee y Medialuna, debido a que
 #el lift alcanzado por esta regla es de un 1.144 esto significa que la probabilidad
-#de comprar medialuna se ve aumentada dado que ya compraron café, específicamente
+#de comprar medialuna se ve aumentada dado que ya compraron caf�, espec�ficamente
 #la probabilidad de comprar medialuna aumenta desde un 0.09263774 a un 0.1060104.
 
 
 # Registros en el tramo: 12:00-16:59
-#Considerando un support mínimo de 0.02 y un confidence mínimo de 0.1, donde con 
-#el primer parámetro controlamos la frecuencia relativa de la asociación, en tanto
-#que con el parámetro confidence controlamos que la probabilidad de que ocurra
-# el consecuente dado que ocurrió el antecedente, entonces se tiene:
+#Considerando un support m�nimo de 0.02 y un confidence m�nimo de 0.1, donde con 
+#el primer par�metro controlamos la frecuencia relativa de la asociaci�n, en tanto
+#que con el par�metro confidence controlamos que la probabilidad de que ocurra
+# el consecuente dado que ocurri� el antecedente, entonces se tiene:
 regla_2_coffee <- apriori(
         data = trans_2,
         parameter = list(
@@ -804,7 +813,7 @@ regla_2_coffee <- apriori(
 #Luego ordenamos por lift
 inspect(sort(regla_2_coffee,by="lift",decreasing = T))
 
-#Revisión de support de item sandwich
+#Revisi�n de support de item sandwich
 regla_2_coffee_rev <- apriori(
         data = trans_2,
         parameter = list(
@@ -818,17 +827,17 @@ regla_2_coffee_rev <- apriori(
 
 inspect(regla_2_coffee_rev)
 
-#En este horario recomendaría una promoción de Coffee y Sandwich, debido a que
+#En este horario recomendar�a una promoci�n de Coffee y Sandwich, debido a que
 #el lift alcanzado por esta regla es de un 1.1818 esto significa que la probabilidad
-#de comprar sandwich se ve aumentada dado que ya compraron café, específicamente
+#de comprar sandwich se ve aumentada dado que ya compraron caf�, espec�ficamente
 #la probabilidad de comprar sandwich aumenta desde un 0.1159363 a un 0.1354701.
 
 
 # Registros en el tramo: 17:00-23:59
-#Considerando un support mínimo de 0.02 y un confidence mínimo de 0.1, donde con 
-#el primer parámetro controlamos la frecuencia relativa de la asociación, en tanto
-#que con el parámetro confidence controlamos que la probabilidad de que ocurra
-# el consecuente dado que ocurrió el antecedente, entonces se tiene:
+#Considerando un support m�nimo de 0.02 y un confidence m�nimo de 0.1, donde con 
+#el primer par�metro controlamos la frecuencia relativa de la asociaci�n, en tanto
+#que con el par�metro confidence controlamos que la probabilidad de que ocurra
+# el consecuente dado que ocurri� el antecedente, entonces se tiene:
 regla_3_coffee <- apriori(
         data = trans_3,
         parameter = list(
@@ -843,7 +852,7 @@ regla_3_coffee <- apriori(
 #Luego ordenamos por lift
 inspect(sort(regla_3_coffee,by="lift",decreasing = T))
 
-#Revisión de support de item cake
+#Revisi�n de support de item cake
 regla_3_coffee_rev <- apriori(
         data = trans_3,
         parameter = list(
@@ -857,9 +866,9 @@ regla_3_coffee_rev <- apriori(
 
 inspect(regla_3_coffee_rev)
 
-#En este horario recomendaría una promoción de Coffee y Cake, debido a que
+#En este horario recomendar�a una promoci�n de Coffee y Cake, debido a que
 #el lift alcanzado por esta regla es de un 2.0800 esto significa que la probabilidad
-#de comprar cake se ve aumentada dado que ya compraron café, específicamente
+#de comprar cake se ve aumentada dado que ya compraron caf�, espec�ficamente
 #la probabilidad de comprar cake aumenta desde un 0.1025641 a un 0.2133333.
 
 
