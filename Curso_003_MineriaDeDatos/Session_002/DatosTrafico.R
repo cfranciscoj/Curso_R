@@ -1,6 +1,6 @@
 
 #Indicar el directorio de trabajo: Dirección donde se encuentra la carpeta.
-setwd("C:/Users/Sebastian/Documents/R")
+setwd("/home/carlos/repos/Curso_R/Curso_003_MineriaDeDatos/Session_002")
 
 #Cargar la base de datos: Indicar el nombre del archivo, el tipo de separacion de columnas.
 datos <- read.csv("DatosTrafico.csv", sep=";",header=TRUE)
