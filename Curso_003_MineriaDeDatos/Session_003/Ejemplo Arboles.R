@@ -1,20 +1,22 @@
 # Instalamos los paquetes necesarios, en caso que no los tengamos instaladas
-install.packages("rpart")
-install.packages("rpart.plot")
+#install.packages("rpart")
+#install.packages("rpart.plot")
 
 # Cargamos las librerias que utilizaremos
 library(rpart)
 library(rpart.plot)
+library(rattle)
+library(RColorBrewer)
 
 # Indicamos el directorio de trabajo
-setwd("C:/Users/Sebastian/Documents/R")
+setwd("H:/repos/Curso_R/Curso_003_MineriaDeDatos/Session_003")
 
 
 # Cargamos la base de datos de entrenamiento
 datos <- read.csv("Datos Tenis.csv", sep=";",header=TRUE)
 
 
-# Árbol de clasificación
+# ?rbol de clasificaci?n
 modelo1 <- rpart(Jugar ~ Clima + Temperatura + Humedad + Viento,
                  data = datos,
                  method = "class",
@@ -24,14 +26,14 @@ modelo1 <- rpart(Jugar ~ Clima + Temperatura + Humedad + Viento,
                                          maxdepth = 5,
                                          cp = 0))
 
-# Especificamos la variable endogena (Jugar) como función de las
+# Especificamos la variable endogena (Jugar) como funci?n de las
 # las variables exogenas (Clima, Temperatura, Humedad y Viento)
 
 # Metodos:
 # "class" para arboles de clasificacion
-# "anova" para arboles de regresión
+# "anova" para arboles de regresi?n
 
-# Parámetro de division para arboles de clasificacion:
+# Par?metro de division para arboles de clasificacion:
 # "information" para usar ganancia de informacion (entropia)
 # "gini" para usar el indice de impuridad de Gini
 
@@ -48,7 +50,13 @@ print(modelo1)
 # Graficamos el arbol
 rpart.plot(modelo1)
 
+plot(modelo1)
 
+prp(modelo1)
+
+rxDTree(modelo1)
+
+fancyRpartPlot(modelo1)
 # Probemos otras combinaciones de parametros de control:
 modelo2 <- rpart(Jugar ~ Clima + Temperatura + Humedad + Viento,
                  data = datos,
@@ -83,16 +91,16 @@ rpart.plot(modelo3)
 
 
 # Opciones adicionales para la representacion visual del arbol:
-# 0 - Sin información adicional
+# 0 - Sin informaci?n adicional
 # 1 - Mostrar cantidad de observaciones por nodo
-# 2 - Tasa de clasificación del nodo (correctos/total)
-# 3 - Tasa de error de clasificación del nodo (incorrectos/tota)
-# 4 - Probabilidad de clasificación del nodo, condicionada al nodo
+# 2 - Tasa de clasificaci?n del nodo (correctos/total)
+# 3 - Tasa de error de clasificaci?n del nodo (incorrectos/tota)
+# 4 - Probabilidad de clasificaci?n del nodo, condicionada al nodo
 # 5 - Igual que 4, pero sin mostrar la clase ajustada
-# 6 - Probabilidad de la segunda clase únicamente
+# 6 - Probabilidad de la segunda clase ?nicamente
 # 7 - Igual que 6, pero sin mostrar la clase ajustada
 # 8 - Probabilidad de la clase ajustada
-# 9 - Probabilidad de clasificación del nodo, relativa a todas las observaciones
+# 9 - Probabilidad de clasificaci?n del nodo, relativa a todas las observaciones
 # 10 - Igual que 9, pero con la probababilidad de la segunda clase
 # 11 - Igual que 10, pero sin mostrar la clase ajustada
 # +100 - Muestra el porcentaje de observaviones del nodo
@@ -155,6 +163,7 @@ datos$prediccionB <- predict(modelo7, datos)
 
 datos$prediccionB <- predict(modelo7, datos, type = "class")
 
+plot(datos$Jugadores,datos$prediccionB)
 # Matriz de confusion
 table(datos$Jugar,datos$prediccionB)
 
