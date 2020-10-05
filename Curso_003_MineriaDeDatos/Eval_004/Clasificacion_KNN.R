@@ -6,6 +6,8 @@ library(caret)
 library(e1071)
 library(gtools)
 library(tidyverse)  
+library(dplyr)
+library(magrittr)
 
 normalize <- function(x) { return ((x - min(x)) / (max(x) - min(x))) }
 
@@ -44,7 +46,6 @@ datos_todos <- as.data.frame(cbind(status_SinCuenta        = (datos$status == 1)
                                    amount   = datos$amount,
                                    savings  = datos$savings,
                                    employed = datos$employed,
-                                   employed = datos$employed,
                                    rate     = datos$rate,
                                    personal_HombreDivorciado    = (datos$personal == 1),
                                    personal_HombreSolMujerNoSol = (datos$personal == 2),
@@ -75,54 +76,81 @@ subset <- sample(1:nrow(datos), size = 0.75 * nrow(datos), replace = FALSE)
 
 
 # Calculo de Accuracy de cada combinación
-#i <- 2
-combinaciones_00 <- c(1:largo_todos)
+
 
 resultados <- data.frame("nro_registro" = integer(),
                          "nro_combi"    = integer(),
                          "knn"          = integer(), 
                          "colunnas"     = character(), 
                          "accuracy"     = double())
-i <- 1
-while( i < largo_todos){
-  i <- i + 1
-  combinaciones <- combinations(largo_todos,  i, combinaciones_00)
 
+combinaciones_00 <- c(1:largo_todos)
+i <- 1
+while( i <= largo_todos){
+  combinaciones <- combinations(largo_todos,  i, combinaciones_00)
   j <- 1
   while(j < nrow(combinaciones)){
-    
     datos_train <- datos_norm[subset, c(combinaciones[j,])]
     label_train <- datos_norm[subset, largo_todos + 1 ]
     datos_test <- datos_norm[-subset, c(combinaciones[j,])]
     label_test <- datos_norm[-subset, largo_todos + 1 ]
     colunas <- agrega_coma(combinaciones[j,])
-    
     k.optm = 1
     n <- 1
     while(n <= 25){
-      
       knn.mod <- knn(datos_train,
                      datos_test,
                      label_train,
                      k = n)
-        
       k.optm <- sum(label_test == knn.mod)/length(label_test)
-        
-      z <- data.frame("nro_registro" = i,
-                      "nro_combi"    = j,
-                      "knn"          = n, 
-                      "colunnas"     = colunas, 
-                      "accuracy"     = k.optm)
+      z <- data.frame("nro_registro" = i      , "nro_combi" = j, "knn" = n, 
+                      "colunnas"     = colunas, "accuracy"  = k.optm)
         
       resultados <-  rbind(resultados,z)
-      
       n <- n + 1
-        
     }
     j <- j + 1
   }
+  i <- i + 1
 }
 
 
 
+res_final <- resultados %>%
+                 filter(accuracy == max(resultados$accuracy, na.rm = FALSE)) %>%
+                 select(nro_registro ,
+                        nro_combi    ,
+                        knn          , 
+                        colunnas     , 
+                        accuracy     ) %>%
+                 head(1)
+  
 
+combinaciones_final <- combinations(largo_todos,  res_final$nro_registro, combinaciones_00)
+
+datos_train_final <- datos_norm[subset, c(combinaciones_final[res_final$nro_combi,])]
+label_train_final <- datos_norm[subset, largo_todos + 1 ]
+datos_test_final <- datos_norm[-subset, c(combinaciones_final[res_final$nro_combi,])]
+label_test_final <- datos_norm[-subset, largo_todos + 1 ]
+colunas_final <- agrega_coma(combinaciones_final[res_final$nro_combi,])
+
+
+
+
+modelo_k_final <- knn(datos_train_final,
+                      datos_test_final,
+                      label_train_final,
+                      k = res_final$knn)
+
+k.optm_final <- sum(label_test_final == modelo_k_final)/length(label_test_final)
+confusionMatrix(modelo_k_final,as.factor(label_test_final), positive = "1")
+
+k_graf_final <- t(resultados %>%
+             filter(nro_registro == res_final$nro_registro & nro_combi == res_final$nro_combi) %>%
+             select(accuracy))
+
+
+
+png(filename = "grafico_004.png", width = 500, height = 250)
+  plot(k_graf_final[1,])
+dev.off()
