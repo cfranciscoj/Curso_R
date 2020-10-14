@@ -1,5 +1,5 @@
 
-
+install.packages("factoextra")
 # Cargamos las librerias que utilizaremos
 library(class)
 library(caret)
